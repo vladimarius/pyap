@@ -81,7 +81,7 @@ use any list of US cities or a list of typical street names. It
 looks for a pattern which is most likely to be an address.
 
 For example the string below would be detected as a valid address: 
- "1 SPIRITUAL HEALER DR SHARIF NSAMBU SPECIALISING IN"
+"1 SPIRITUAL HEALER DR SHARIF NSAMBU SPECIALISING IN"
 
 It happens because this string has all the components of a valid
 address: street number "1", street name "SPIRITUAL HEALER" followed
