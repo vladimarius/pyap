@@ -6,16 +6,17 @@ def readme():
         return f.read()
 
 setup(name='pyap',
-      version='0.1',
+      version='0.1.0',
       description='Library for detecting and parsing addresses.'
       ' Currently supports US and Canadian addresses.',
       long_description=readme(),
-      keywords='adress detection, address parsing',
+      keywords='address detection, address parsing',
       url='http://github.com/vladimarius/pyap',
       author='Vladimir Goncharov',
       author_email='vladimarius@gmail.com',
       license='MIT',
       packages=['pyap', 'pyap.packages', 'pyap.source_CA', 'pyap.source_US'],
+      download_url='https://github.com/vladimarius/pyap',
       zip_safe=False,
       classifiers=(
           'Intended Audience :: Developers',
