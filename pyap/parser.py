@@ -67,7 +67,7 @@ class AddressParser:
 
     def _parse_address(self, address_string):
         '''Parses address into parts'''
-        match = utils.match(self.rules, address_string, re.VERBOSE | re.U)
+        match = utils.match(self.rules, address_string, flags=re.VERBOSE | re.U)
         if match:
             match_as_dict = match.groupdict()
             match_as_dict.update({'country_id': self.country})
@@ -123,7 +123,7 @@ class AddressParser:
             '―': '-',
         }
         for find, replace in six.iteritems(conversion):
-            text = re.sub(find, replace, text, re.UNICODE)
+            text = re.sub(find, replace, text, flags=re.UNICODE)
         return text
 
     def _get_addresses(self, text):
@@ -133,7 +133,7 @@ class AddressParser:
         matches = utils.findall(
             self.rules,
             text,
-            re.VERBOSE | re.U)
+            flags=re.VERBOSE | re.U)
 
         if(matches):
             for match in matches:
