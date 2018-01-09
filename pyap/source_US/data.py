@@ -269,7 +269,7 @@ region1 = r"""
                 mn|ms|mo|mt|ne|nv|nh|nj|nm|ny|nc|nd|oh|ok|or|pa|ri|sc|sd|tn|tx|ut|vt|
                 va|wa|wv|wi|wy|
                 # unincorporated & commonwealth territories
-                AS|GU|MP|PR|VI
+                AS|GU|MP|PR|VI|
                 as|gu|mp|pr|vi
             )
             |
@@ -327,6 +327,7 @@ region1 = r"""
                 [Ww][Ee][Ss][Tt]\ [Vv][Ii][Rr][Gg][Ii][Nn][Ii][Aa]|
                 [Ww][Ii][Ss][Cc][Oo][Nn][Ss][Ii][Nn]|
                 [Ww][Yy][Oo][Mm][Ii][Nn][Gg]|
+                
                 # unincorporated & commonwealth territories
                 [Aa][Mm][Ee][Rr][Ii][Cc][Aa][Nn]\ [Ss][Aa][Mm][Oo][Aa]
                 |[Gg][Uu][Aa][Mm]|
