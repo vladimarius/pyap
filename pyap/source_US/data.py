@@ -265,8 +265,12 @@ region1 = r"""
                 AL|AK|AZ|AR|CA|CO|CT|DE|DC|FL|GA|HI|ID|IL|IN|IA|KS|KY|LA|ME|MD|MA|MI|
                 MN|MS|MO|MT|NE|NV|NH|NJ|NM|NY|NC|ND|OH|OK|OR|PA|RI|SC|SD|TN|TX|UT|VT|
                 VA|WA|WV|WI|WY|
+                al|ak|az|ar|ca|co|ct|de|dc|fl|ga|hi|id|il|in|ia|ks|ky|la|me|md|ma|mi|
+                mn|ms|mo|mt|ne|nv|nh|nj|nm|ny|nc|nd|oh|ok|or|pa|ri|sc|sd|tn|tx|ut|vt|
+                va|wa|wv|wi|wy|
                 # unincorporated & commonwealth territories
                 AS|GU|MP|PR|VI
+                as|gu|mp|pr|vi
             )
             |
             (?:
