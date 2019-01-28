@@ -23,7 +23,7 @@ if six.PY2:
         return re.match(
             unicode(regex, 'utf-8'),
             string,
-            flags
+            flags=flags
         )
 
     def findall(regex, string, flags=0):
@@ -33,7 +33,7 @@ if six.PY2:
         return re.findall(
             unicode(regex, 'utf-8'),
             string,
-            flags
+            flags=flags
         )
 
     def unicode_str(string):
@@ -44,11 +44,11 @@ elif six.PY3:
 
     def match(regex, string, flags=0):
         '''Utility function for re.match '''
-        return re.match(regex, string, flags)
+        return re.match(regex, string, flags=flags)
 
     def findall(regex, string, flags=0):
         '''Utility function for re.findall '''
-        return re.findall(regex, string, flags)
+        return re.findall(regex, string, flags=flags)
 
     def unicode_str(string):
         '''Return Unicode string'''
