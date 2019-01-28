@@ -167,6 +167,8 @@ street_type = r"""
                 S[Qq][Uu][Aa][Rr][Ee]{div}|S[Qq]{div}|
                 # Loop
                 L[Oo][Oo][Pp]{div}|L[Pp]{div}
+                # Place
+                P[Ll][Aa][Cc][Ee]{div}|P[Ll]{div}
             )
             (?P<route_id>
                 [\(\ \,]{route_symbols}
