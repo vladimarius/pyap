@@ -20,7 +20,7 @@ class Address(object):
         keys = []
         vals = []
         for k, v in six.iteritems(args):
-            if v:
+            if v and isinstance(v, str):
                 v = v.strip(' ,;:')
             # create object variables
             setattr(self, k, v)
