@@ -301,24 +301,26 @@ occupancy = r"""
             (?P<occupancy>
                 (?:
                     (?:
-                        # Suite
-                        [Ss][Uu][Ii][Tt][Ee]\ |[Ss][Tt][Ee]\.?\ 
-                        |
-                        # Apartment
-                        [Aa][Pp][Tt]\.?\ |[Aa][Pp][Aa][Rr][Tt][Mm][Ee][Nn][Tt]\ 
-                        |
-                        # Room
-                        [Rr][Oo][Oo][Mm]\ |[Rr][Mm]\.?\ 
+                        (?:
+                            # Suite
+                            [Ss][Uu][Ii][Tt][Ee]\ |[Ss][Tt][Ee]\.?\ 
+                            |
+                            # Apartment
+                            [Aa][Pp][Tt]\.?\ |[Aa][Pp][Aa][Rr][Tt][Mm][Ee][Nn][Tt]\ 
+                            |
+                            # Room
+                            [Rr][Oo][Oo][Mm]\ |[Rr][Mm]\.?\ 
+                        )
+                        (?:
+                            [A-Za-z\#\&\-\d]{1,7}
+                        )?
                     )
+                    |
                     (?:
-                        [A-Za-z\#\&\-\d]{1,7}
-                    )?
-                )
-                |
-                (?:
-                    \#[0-9]{,3}[A-Za-z]{1}
-                )
-            )\ ?
+                        \#[0-9]{,3}[A-Za-z]{1}
+                    )
+                )\ ?
+            )
             """
 
 po_box = r"""
