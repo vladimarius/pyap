@@ -267,7 +267,7 @@ floor = r"""
         """
 
 building = r"""
-            (?:
+            (?P<building_id>
                 (?:
                     (?:[Bb][Uu][Ii][Ll][Dd][Ii][Nn][Gg])
                     |
@@ -278,7 +278,7 @@ building = r"""
             """
 
 occupancy = r"""
-            (?:
+            (?P<occupancy>
                 (?:
                     (?:
                         # Suite
@@ -310,21 +310,13 @@ po_box = r"""
 full_street = r"""
     (?:
         (?P<full_street>
-
             {street_number}
             {street_name}?\,?\ ?
             (?:[\ \,]{street_type})\,?\ ?
             {post_direction}?\,?\ ?
             {floor}?\,?\ ?
-
-            (?P<building_id>
-                {building}
-            )?\,?\ ?
-
-            (?P<occupancy>
-                {occupancy}
-            )?\,?\ ?
-
+            {building}?\,?\ ?
+            {occupancy}?\,?\ ?
             {po_box}?
         )
     )""".format(street_number=street_number,
