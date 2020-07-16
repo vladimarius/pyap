@@ -443,11 +443,8 @@ postal_code = r"""
 
 country = r"""
             (?:
-                ([Uu]\.?[Ss]\.?[Aa]\.?)|
-                ([Uu][Nn][Ii][Tt][Ee][Dd]\ [Ss][Tt][Aa][Tt][Ee][Ss])
-                # we do not catch for "United States of America"
-                # since nobody really uses that form to write an
-                # address
+                [Uu]\.?[Ss]\.?[Aa]\.?|
+                [Uu][Nn][Ii][Tt][Ee][Dd]\ [Ss][Tt][Aa][Tt][Ee][Ss](?:\ [Oo][Ff]\ [Aa][Mm][Ee][Rr][Ii][Cc][Aa])?
             )
             """
 
