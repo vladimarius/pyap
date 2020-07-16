@@ -58,16 +58,18 @@ class AddressParser:
         self.clean_text = self._normalize_string(text)
 
         # get addresses
-        addresses = set(self._get_addresses(self.clean_text))
-        if addresses:
+        address_matches = utils.finditer(self.rules, self.clean_text)
+        if address_matches:
             # append parsed address info
-            results = list(map(self._parse_address, addresses))
+            results = list(map(self._parse_address, address_matches))
 
         return results
 
-    def _parse_address(self, address_string):
+    def _parse_address(self, match):
         '''Parses address into parts'''
-        match = utils.match(self.rules, address_string, flags=re.VERBOSE | re.U)
+        if isinstance(match, str):
+            # If the address is passed as a match it saves foing the match twice
+            match = utils.match(self.rules, match, flags=re.VERBOSE | re.U)
         if match:
             match_as_dict = match.groupdict()
             match_as_dict.update({'country_id': self.country})
@@ -78,7 +80,8 @@ class AddressParser:
 
         return False
 
-    def _combine_results(self, match_as_dict):
+    @staticmethod
+    def _combine_results(match_as_dict):
             '''Combine results from different parsed parts:
             we look for non-empty results in values like
             'postal_code_b' or 'postal_code_c' and store
@@ -127,17 +130,3 @@ class AddressParser:
         for find, replace in six.iteritems(conversion):
             text = re.sub(find, replace, text, flags=re.UNICODE)
         return text
-
-    def _get_addresses(self, text):
-        '''Returns a list of addresses found in text'''
-        # find addresses
-        addresses = []
-        matches = utils.findall(
-            self.rules,
-            text,
-            flags=re.VERBOSE | re.U)
-
-        if(matches):
-            for match in matches:
-                addresses.append(match[0].strip())
-        return addresses
