@@ -5,20 +5,21 @@ def readme():
     with open('README.rst') as f:
         return f.read()
 
+
 setup(name='pyap',
-      version='0.1.0',
+      version='0.2.0',
       description='Library for detecting and parsing addresses.'
-      ' Currently supports US and Canadian addresses.',
+      ' Currently supports US, Canadian and British addresses.',
       long_description=readme(),
       keywords='address detection, address parsing',
       url='http://github.com/vladimarius/pyap',
       author='Vladimir Goncharov',
       author_email='vladimarius@gmail.com',
       license='MIT',
-      packages=['pyap', 'pyap.packages', 'pyap.source_CA', 'pyap.source_US'],
+      packages=['pyap', 'pyap.packages', 'pyap.source_CA', 'pyap.source_US', 'pyap.source_GB'],
       download_url='https://github.com/vladimarius/pyap',
       zip_safe=False,
-      classifiers=(
+      classifiers=[
           'Intended Audience :: Developers',
           'Development Status :: 4 - Beta',
           'License :: OSI Approved :: MIT License',
@@ -33,5 +34,5 @@ setup(name='pyap',
           'Topic :: Software Development :: Libraries',
           'Topic :: Scientific/Engineering :: Information Analysis',
           'Topic :: Utilities'
-      ),
+      ],
       )
