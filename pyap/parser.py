@@ -75,6 +75,8 @@ class AddressParser:
             match_as_dict.update({'country_id': self.country})
             # combine results
             cleaned_dict = self._combine_results(match_as_dict)
+            cleaned_dict['match_start'] = match.start()
+            cleaned_dict['match_end'] = match.end()
             # create object containing results
             return address.Address(**cleaned_dict)
 
