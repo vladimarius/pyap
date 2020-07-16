@@ -459,7 +459,7 @@ full_address = r"""
                 )
                 """.format(
     full_street=full_street,
-    div='[\, ]{,2}',
+    div=r'[\, ]{,2}',
     city=city,
     region1=region1,
     country=country,
