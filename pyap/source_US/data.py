@@ -431,7 +431,7 @@ region1 = r"""
 # TODO: doesn't catch cities containing French characters
 city = r"""
         (?P<city>
-            [A-za-z]{1}[a-zA-Z\ \-\'\.]{2,20}
+            [A-Za-z]{1}[a-zA-Z\ \-\'\.]{2,20}
         )
         """
 
