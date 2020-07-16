@@ -273,9 +273,29 @@ building = r"""
                     |
                     (?:[Bb][Ll][Dd][Gg])
                 )
-                \ \d{0,2}[A-Za-z]?
+                \ 
+                (?:
+                    (?:
+                        [Aa][Nn][Dd]\ 
+                        |
+                        {thousand}
+                        |
+                        {hundred}
+                        |
+                        {zero_to_nine}
+                        |
+                        {ten_to_ninety}
+                    ){{1,5}}
+                    |
+                    \d{{0,4}}[A-Za-z]?
+                )
+                \ ?
             )
-            """
+            """.format(thousand=thousand,
+                       hundred=hundred,
+                       zero_to_nine=zero_to_nine,
+                       ten_to_ninety=ten_to_ninety,
+                       )
 
 occupancy = r"""
             (?P<occupancy>
