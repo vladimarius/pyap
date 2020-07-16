@@ -14,6 +14,8 @@
     :license: MIT, see LICENSE for more details.
 """
 
+import string
+
 
 '''Numerals from one to nine
 Note: here and below we use syntax like '[Oo][Nn][Ee]'
@@ -124,57 +126,134 @@ post_direction = r"""
                     )
                 """
 
+# This list was taken from: https://pe.usps.com/text/pub28/28apc_002.htm
+# Broadway and Lp (abbreviation for Loop) were added to the list
+street_type_list = [
+    'Allee', 'Alley', 'Ally', 'Aly', 'Anex', 'Annex',
+    'Annx', 'Anx', 'Arc', 'Arcade', 'Av', 'Ave',
+    'Aven', 'Avenu', 'Avenue', 'Avn', 'Avnue', 'Bayoo',
+    'Bayou', 'Bch', 'Beach', 'Bend', 'Bg', 'Bgs',
+    'Blf', 'Blfs', 'Bluf', 'Bluff', 'Bluffs', 'Blvd',
+    'Bnd', 'Bot', 'Bottm', 'Bottom', 'Boul', 'Boulevard',
+    'Boulv', 'Br', 'Branch', 'Brdge', 'Brg', 'Bridge',
+    'Brk', 'Brks', 'Brnch', 'Broadway', 'Brook', 'Brooks',
+    'Btm', 'Burg', 'Burgs', 'Byp', 'Bypa', 'Bypas',
+    'Bypass', 'Byps', 'Byu', 'Camp', 'Canyn', 'Canyon',
+    'Cape', 'Causeway', 'Causwa', 'Cen', 'Cent', 'Center',
+    'Centers', 'Centr', 'Centre', 'Cir', 'Circ', 'Circl',
+    'Circle', 'Circles', 'Cirs', 'Clb', 'Clf', 'Clfs',
+    'Cliff', 'Cliffs', 'Club', 'Cmn', 'Cmns', 'Cmp',
+    'Cnter', 'Cntr', 'Cnyn', 'Common', 'Commons', 'Cor',
+    'Corner', 'Corners', 'Cors', 'Course', 'Court', 'Courts',
+    'Cove', 'Coves', 'Cp', 'Cpe', 'Crcl', 'Crcle',
+    'Creek', 'Cres', 'Crescent', 'Crest', 'Crk', 'Crossing',
+    'Crossroad', 'Crossroads', 'Crse', 'Crsent', 'Crsnt', 'Crssng',
+    'Crst', 'Cswy', 'Ct', 'Ctr', 'Ctrs', 'Cts',
+    'Curv', 'Curve', 'Cv', 'Cvs', 'Cyn', 'Dale',
+    'Dam', 'Div', 'Divide', 'Dl', 'Dm', 'Dr',
+    'Driv', 'Drive', 'Drives', 'Drs', 'Drv', 'Dv',
+    'Dvd', 'Est', 'Estate', 'Estates', 'Ests', 'Exp',
+    'Expr', 'Express', 'Expressway', 'Expw', 'Expy', 'Ext',
+    'Extension', 'Extensions', 'Extn', 'Extnsn', 'Exts', 'Fall',
+    'Falls', 'Ferry', 'Field', 'Fields', 'Flat', 'Flats',
+    'Fld', 'Flds', 'Fls', 'Flt', 'Flts', 'Ford',
+    'Fords', 'Forest', 'Forests', 'Forg', 'Forge', 'Forges',
+    'Fork', 'Forks', 'Fort', 'Frd', 'Frds', 'Freeway',
+    'Freewy', 'Frg', 'Frgs', 'Frk', 'Frks', 'Frry',
+    'Frst', 'Frt', 'Frway', 'Frwy', 'Fry', 'Ft',
+    'Fwy', 'Garden', 'Gardens', 'Gardn', 'Gateway', 'Gatewy',
+    'Gatway', 'Gdn', 'Gdns', 'Glen', 'Glens', 'Gln',
+    'Glns', 'Grden', 'Grdn', 'Grdns', 'Green', 'Greens',
+    'Grn', 'Grns', 'Grov', 'Grove', 'Groves', 'Grv',
+    'Grvs', 'Gtway', 'Gtwy', 'Harb', 'Harbor', 'Harbors',
+    'Harbr', 'Haven', 'Hbr', 'Hbrs', 'Heights', 'Highway',
+    'Highwy', 'Hill', 'Hills', 'Hiway', 'Hiwy', 'Hl',
+    'Hllw', 'Hls', 'Hollow', 'Hollows', 'Holw', 'Holws',
+    'Hrbor', 'Ht', 'Hts', 'Hvn', 'Hway', 'Hwy',
+    'Inlet', 'Inlt', 'Is', 'Island', 'Islands', 'Isle',
+    'Isles', 'Islnd', 'Islnds', 'Iss', 'Jct', 'Jction',
+    'Jctn', 'Jctns', 'Jcts', 'Junction', 'Junctions', 'Junctn',
+    'Juncton', 'Key', 'Keys', 'Knl', 'Knls', 'Knol',
+    'Knoll', 'Knolls', 'Ky', 'Kys', 'Lake', 'Lakes',
+    'Land', 'Landing', 'Lane', 'Lck', 'Lcks', 'Ldg',
+    'Ldge', 'Lf', 'Lgt', 'Lgts', 'Light', 'Lights',
+    'Lk', 'Lks', 'Ln', 'Lndg', 'Lndng', 'Loaf',
+    'Lock', 'Locks', 'Lodg', 'Lodge', 'Loop', 'Loops',
+    'Lp', 'Mall', 'Manor', 'Manors', 'Mdw', 'Mdws',
+    'Meadow', 'Meadows', 'Medows', 'Mews', 'Mill', 'Mills',
+    'Mission', 'Missn', 'Ml', 'Mls', 'Mnr', 'Mnrs',
+    'Mnt', 'Mntain', 'Mntn', 'Mntns', 'Motorway', 'Mount',
+    'Mountain', 'Mountains', 'Mountin', 'Msn', 'Mssn', 'Mt',
+    'Mtin', 'Mtn', 'Mtns', 'Mtwy', 'Nck', 'Neck',
+    'Opas', 'Orch', 'Orchard', 'Orchrd', 'Oval', 'Overpass',
+    'Ovl', 'Park', 'Parks', 'Parkway', 'Parkways', 'Parkwy',
+    'Pass', 'Passage', 'Path', 'Paths', 'Pike', 'Pikes',
+    'Pine', 'Pines', 'Pkway', 'Pkwy', 'Pkwys', 'Pky',
+    'Pl', 'Place', 'Plain', 'Plains', 'Plaza', 'Pln',
+    'Plns', 'Plz', 'Plza', 'Pne', 'Pnes', 'Point',
+    'Points', 'Port', 'Ports', 'Pr', 'Prairie', 'Prk',
+    'Prr', 'Prt', 'Prts', 'Psge', 'Pt', 'Pts',
+    'Rad', 'Radial', 'Radiel', 'Radl', 'Ramp', 'Ranch',
+    'Ranches', 'Rapid', 'Rapids', 'Rd', 'Rdg', 'Rdge',
+    'Rdgs', 'Rds', 'Rest', 'Ridge', 'Ridges', 'Riv',
+    'River', 'Rivr', 'Rnch', 'Rnchs', 'Road', 'Roads',
+    'Route', 'Row', 'Rpd', 'Rpds', 'Rst', 'Rte',
+    'Rue', 'Run', 'Rvr', 'Shl', 'Shls', 'Shoal',
+    'Shoals', 'Shoar', 'Shoars', 'Shore', 'Shores', 'Shr',
+    'Shrs', 'Skwy', 'Skyway', 'Smt', 'Spg', 'Spgs',
+    'Spng', 'Spngs', 'Spring', 'Springs', 'Sprng', 'Sprngs',
+    'Spur', 'Spurs', 'Sq', 'Sqr', 'Sqre', 'Sqrs',
+    'Sqs', 'Squ', 'Square', 'Squares', 'St', 'Sta',
+    'Station', 'Statn', 'Stn', 'Str', 'Stra', 'Strav',
+    'Straven', 'Stravenue', 'Stravn', 'Stream', 'Street', 'Streets',
+    'Streme', 'Strm', 'Strt', 'Strvn', 'Strvnue', 'Sts',
+    'Sumit', 'Sumitt', 'Summit', 'Ter', 'Terr', 'Terrace',
+    'Throughway', 'Tpke', 'Trace', 'Traces', 'Track', 'Tracks',
+    'Trafficway', 'Trail', 'Trailer', 'Trails', 'Trak', 'Trce',
+    'Trfy', 'Trk', 'Trks', 'Trl', 'Trlr', 'Trlrs',
+    'Trls', 'Trnpk', 'Trwy', 'Tunel', 'Tunl', 'Tunls',
+    'Tunnel', 'Tunnels', 'Tunnl', 'Turnpike', 'Turnpk', 'Un',
+    'Underpass', 'Union', 'Unions', 'Uns', 'Upas', 'Valley',
+    'Valleys', 'Vally', 'Vdct', 'Via', 'Viadct', 'Viaduct',
+    'View', 'Views', 'Vill', 'Villag', 'Village', 'Villages',
+    'Ville', 'Villg', 'Villiage', 'Vis', 'Vist', 'Vista',
+    'Vl', 'Vlg', 'Vlgs', 'Vlly', 'Vly', 'Vlys',
+    'Vst', 'Vsta', 'Vw', 'Vws', 'Walk', 'Walks',
+    'Wall', 'Way', 'Ways', 'Well', 'Wells', 'Wl',
+    'Wls', 'Wy', 'Xing', 'Xrd', 'Xrds',
+]
+
+
+def street_type_list_to_regex(street_type_list):
+    """Converts a list of street types into a regex"""
+    street_types = '|'.join(set(street_type_list)).lower()
+    for letter in string.ascii_lowercase:
+        street_types = street_types.replace(letter, '[{upper}{lower}]'.format(upper=letter.upper(), lower=letter))
+
+    # Use \b to check that there are word boundaries before and after the street type
+    # Optionally match zero to two of " ", ",", or "." after the street name
+    street_types = street_types.replace('|', r'\b{div}|\b')
+    street_types = r'\b' + street_types + r'\b{div}'
+    return street_types.format(
+        div=r'[\.\ ,]{0,2}',
+    )
+
+
 # Regexp for matching street type
 street_type = r"""
-            (?P<street_type>
-                # Street
-                S[Tt][Rr][Ee][Ee][Tt]{div}|S[Tt](?![A-Za-z]){div}|
-                # Boulevard
-                B[Oo][Uu][Ll][Ee][Vv][Aa][Rr][Dd]{div}|[Bb][Ll][Vv][Dd]{div}|
-                # Highway
-                H[Ii][Gg][Hh][Ww][Aa][Yy]{div}|H[Ww][Yy]{div}|
-                # Broadway
-                B[Rr][Oo][Aa][Dd][Ww][Aa][Yy]{div}|
-                # Freeway
-                F[Rr][Ee][Ee][Ww][Aa][Yy]{div}|
-                # Causeway
-                C[Aa][Uu][Ss][Ee][Ww][Aa][Yy]{div}|C[Ss][Ww][Yy]{div}|
-                # Expressway
-                E[Xx][Pp][Rr][Ee][Ss][Ss][Ww][Aa][Yy]{div}|
-                # Way
-                W[Aa][Yy]{div}|
-                # Walk
-                W[Aa][Ll][Kk]{div}|
-                # Lane
-                L[Aa][Nn][Ee]{div}|L[Nn]{div}|
-                # Road
-                R[Oo][Aa][Dd]{div}|R[Dd]{div}|
-                # Avenue
-                A[Vv][Ee][Nn][Uu][Ee]{div}|A[Vv][Ee]{div}|
-                # Circle
-                C[Ii][Rr][Cc][Ll][Ee]{div}|C[Ii][Rr]{div}|
-                # Cove
-                C[Oo][Vv][Ee]{div}|C[Vv]{div}|
-                # Drive
-                D[Rr][Ii][Vv][Ee]{div}|D[Rr]{div}|
-                # Parkway
-                P[Aa][Rr][Kk][Ww][Aa][Yy]{div}|P[Kk][Ww][Yy]{div}|
-                # Park
-                P[Aa][Rr][Kk]{div}|
-                # Court
-                C[Oo][Uu][Rr][Tt]{div}|C[Tt]{div}|
-                # Square
-                S[Qq][Uu][Aa][Rr][Ee]{div}|S[Qq]{div}|
-                # Loop
-                L[Oo][Oo][Pp]{div}|L[Pp]{div}
-                # Place
-                P[Ll][Aa][Cc][Ee]{div}|P[Ll]{div}
+            (?:
+                (?P<street_type>
+                    {street_types}
+                )
+                (?P<route_id>
+                    [\(\ \,]{route_symbols}
+                    [Rr][Oo][Uu][Tt][Ee]\ [A-Za-z0-9]+[\)\ \,]{route_symbols}
+                )?
             )
-            (?P<route_id>
-                [\(\ \,]{route_symbols}
-                [Rr][Oo][Uu][Tt][Ee]\ [A-Za-z0-9]+[\)\ \,]{route_symbols}
-            )?
-            """.format(div="[\.\ ,]?", route_symbols='{0,3}')
+""".format(
+    route_symbols='{0,3}',
+    street_types=street_type_list_to_regex(street_type_list),
+)
 
 floor = r"""
             (?P<floor>
