@@ -102,15 +102,17 @@ class AddressParser:
                         vals.append(v)
             return dict(zip(keys, vals))
 
-    def _normalize_string(self, text):
+    @staticmethod
+    def _normalize_string(text):
         '''Prepares incoming text for parsing:
         removes excessive spaces, tabs, newlines, etc.
         '''
         conversion = {
             # newlines
-            '\r?\n': ' ',
+            r'\r*(\n\r*)+': ', ',
+            r'\s*(\,\s*)+': ', ',
             # replace excessive empty spaces
-            '\s+': ' ',
+            r'\s+': ' ',
             # convert all types of hyphens/dashes to a
             # simple old-school dash
             # from http://utf8-chartable.de/unicode-utf8-table.pl?
