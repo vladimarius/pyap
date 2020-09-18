@@ -447,25 +447,25 @@ def test_country(input, expected):
     ("No. 22 The Light, The Headrow, Leeds LS1 8TL", True),
     ("55 Glenfada Park, Londonderry BT48 9DR", True),
     ("Studio 53, Harrison cove, Smithbury, G88 4US", True),
-    # # negative assertions
-    # ("85 STEEL REGULAR SHAFT - NE", False),
-    # ("3 STRUCTURE WITH PE", False),
-    # ("2013 Courtesy of DONNA LUPI, PR", False),
-    # ("44 sq. ft. 000 Columbia Ave. See Remarks, Newfield, NJ 08344", False),
-    # ("7901 SILVER CONDUCTIVE HOLE FILL MA", False),
-    # ("3 THIRD PARTY LIST IN", False),
-    # ("9 STORAGE OF INDIVIDUAL IN", False),
-    # ("4 BODY WAVE MODEL MO", False),
-    # ("4060 AUTOMATIC STRAPPING MACHINE KZB-II STRAPPING MA", False),
-    # ("130 AUTOMATIC STRAPPING MACHINE CO", False),
-    # ("6060 AUTOMATIC STRAPPING MACHINE SK", False),
-    # ("500 AUTO BLISTER PACKING SEALING MA", False),
-    # ("23 ELECTRICAL COLOURED-TAPE PR", False),
-    # ("1900 TRANSISTOR ELECTROMAGNETIC INDUCTION AL", False),
-    # ("3131 DR. MATTHEW WI", False),
-    # ("ONE FOR ANY DIRECT, INDIRECT, IN", False),
-    # ("2 TRACTOR HEAD Actros MP", False),
-    # ("00 Straight Fit Jean, USA", False),
+    # negative assertions
+    ("85 STEEL REGULAR SHAFT - NE", False),
+    ("3 STRUCTURE WITH PE", False),
+    ("2013 Courtesy of DONNA LUPI, PR", False),
+    ("44 sq. ft. 000 Columbia Ave. See Remarks, Newfield, NJ 08344", False),
+    ("7901 SILVER CONDUCTIVE HOLE FILL MA", False),
+    ("3 THIRD PARTY LIST IN", False),
+    ("9 STORAGE OF INDIVIDUAL IN", False),
+    ("4 BODY WAVE MODEL MO", False),
+    ("4060 AUTOMATIC STRAPPING MACHINE KZB-II STRAPPING MA", False),
+    ("130 AUTOMATIC STRAPPING MACHINE CO", False),
+    ("6060 AUTOMATIC STRAPPING MACHINE SK", False),
+    ("500 AUTO BLISTER PACKING SEALING MA", False),
+    ("23 ELECTRICAL COLOURED-TAPE PR", False),
+    ("1900 TRANSISTOR ELECTROMAGNETIC INDUCTION AL", False),
+    ("3131 DR. MATTHEW WI", False),
+    ("ONE FOR ANY DIRECT, INDIRECT, IN", False),
+    ("2 TRACTOR HEAD Actros MP", False),
+    ("00 Straight Fit Jean, USA", False),
 ])
 def test_full_address(input, expected):
     ''' tests exact string match for a full address '''
@@ -509,6 +509,7 @@ def test_full_address_parts():
                 address_text = filler_text_before + address_parts['full_address'] + filler_text_after
 
                 parsed = pyap.parse(address_text, country='GB')
+                print (pyap.parser.AddressParser._normalize_string(address_text))
                 # Ensure that only one address is found
                 assert len(parsed) == 1
                 for k, v in six.iteritems(address_parts):
