@@ -454,7 +454,7 @@ full_address = r"""
                     {city} {div}
                     {region1} {div}
                     (?:
-                        (?:{postal_code}?\ ?,?{country}?)
+                        (?:{postal_code}?(\ ?,?{country})?)
                     )
                 )
                 """.format(
