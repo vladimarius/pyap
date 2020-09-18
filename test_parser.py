@@ -51,11 +51,10 @@ def test_country_detection_missing():
 
 def test_normalize_string():
     ap = parser.AddressParser(country='US')
-    raw_string = """
-    The  quick      \t, brown fox      jumps over the lazy dog,
+    raw_string = """\n The  quick      \t, brown fox      jumps over the lazy dog,
     ‐ ‑ ‒ – — ―
     """
-    clean_string = ', The quick, brown fox jumps over the lazy dog, - - - - - -, '
+    clean_string = u', The quick, brown fox jumps over the lazy dog, - - - - - -, '
     assert ap._normalize_string(raw_string) == clean_string
 
 
