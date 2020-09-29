@@ -3,8 +3,7 @@ Pyap: Python address parser
 
 
 Pyap is an MIT Licensed text processing library, written in Python, for
-detecting and parsing addresses. Currently it supports USA and Canadian
-addresses. 
+detecting and parsing addresses. Currently it supports US 🇺🇸, Canadian 🇨🇦 and British 🇬🇧 addresses. 
 
 
 .. code-block:: python
