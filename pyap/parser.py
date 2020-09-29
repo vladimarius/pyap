@@ -58,27 +58,32 @@ class AddressParser:
         self.clean_text = self._normalize_string(text)
 
         # get addresses
-        addresses = set(self._get_addresses(self.clean_text))
-        if addresses:
+        address_matches = utils.finditer(self.rules, self.clean_text)
+        if address_matches:
             # append parsed address info
-            results = list(map(self._parse_address, addresses))
+            results = list(map(self._parse_address, address_matches))
 
         return results
 
-    def _parse_address(self, address_string):
+    def _parse_address(self, match):
         '''Parses address into parts'''
-        match = utils.match(self.rules, address_string, flags=re.VERBOSE | re.U)
+        if isinstance(match, str):
+            # If the address is passed as a match it saves foing the match twice
+            match = utils.match(self.rules, match, flags=re.VERBOSE | re.U)
         if match:
             match_as_dict = match.groupdict()
             match_as_dict.update({'country_id': self.country})
             # combine results
             cleaned_dict = self._combine_results(match_as_dict)
+            cleaned_dict['match_start'] = match.start()
+            cleaned_dict['match_end'] = match.end()
             # create object containing results
             return address.Address(**cleaned_dict)
 
         return False
 
-    def _combine_results(self, match_as_dict):
+    @staticmethod
+    def _combine_results(match_as_dict):
             '''Combine results from different parsed parts:
             we look for non-empty results in values like
             'postal_code_b' or 'postal_code_c' and store
@@ -102,15 +107,17 @@ class AddressParser:
                         vals.append(v)
             return dict(zip(keys, vals))
 
-    def _normalize_string(self, text):
+    @staticmethod
+    def _normalize_string(text):
         '''Prepares incoming text for parsing:
         removes excessive spaces, tabs, newlines, etc.
         '''
         conversion = {
             # newlines
-            '\r?\n': ' ',
+            r'\r*(\n\r*)+': ', ',
+            r'\s*(\,\s*)+': ', ',
             # replace excessive empty spaces
-            '\s+': ' ',
+            r'\s+': ' ',
             # convert all types of hyphens/dashes to a
             # simple old-school dash
             # from http://utf8-chartable.de/unicode-utf8-table.pl?
@@ -125,17 +132,3 @@ class AddressParser:
         for find, replace in six.iteritems(conversion):
             text = re.sub(find, replace, text, flags=re.UNICODE)
         return text
-
-    def _get_addresses(self, text):
-        '''Returns a list of addresses found in text'''
-        # find addresses
-        addresses = []
-        matches = utils.findall(
-            self.rules,
-            text,
-            flags=re.VERBOSE | re.U)
-
-        if(matches):
-            for match in matches:
-                addresses.append(match[0].strip())
-        return addresses

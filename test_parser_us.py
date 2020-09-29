@@ -9,6 +9,19 @@ from pyap.packages import six
 import pyap.source_US.data as data_us
 
 
+def execute_matching_test(input, expected, pattern):
+    match = utils.match(pattern, input, re.VERBOSE)
+    is_found = match is not None
+    if expected:
+        assert is_found == expected and match.group(0) == input
+    else:
+        """we check that:
+           - input should not to match our regex
+           - our match should be partial if regex matches some part of string
+        """
+        assert (is_found == expected) or (match.group(0) != input)
+
+
 @pytest.mark.parametrize("input,expected", [
     # positive assertions
     ("ZERO ", True),
@@ -29,9 +42,7 @@ import pyap.source_US.data as data_us
 ])
 def test_zero_to_nine(input, expected):
     ''' test string match for zero_to_nine '''
-    is_found = utils.match(data_us.zero_to_nine, input, re.VERBOSE)\
-        is not None
-    assert is_found == expected
+    execute_matching_test(input, expected, data_us.zero_to_nine)
 
 
 @pytest.mark.parametrize("input,expected", [
@@ -53,9 +64,7 @@ def test_zero_to_nine(input, expected):
 ])
 def test_ten_to_ninety(input, expected):
     ''' test string match for ten_to_ninety '''
-    is_found = utils.match(data_us.ten_to_ninety, input, re.VERBOSE)\
-        is not None
-    assert is_found == expected
+    execute_matching_test(input, expected, data_us.ten_to_ninety)
 
 
 @pytest.mark.parametrize("input,expected", [
@@ -68,8 +77,7 @@ def test_ten_to_ninety(input, expected):
 ])
 def test_hundred(input, expected):
     ''' tests string match for a hundred '''
-    is_found = utils.match(data_us.hundred, input, re.VERBOSE) is not None
-    assert is_found == expected
+    execute_matching_test(input, expected, data_us.hundred)
 
 
 @pytest.mark.parametrize("input,expected", [
@@ -84,8 +92,7 @@ def test_hundred(input, expected):
 ])
 def test_thousand(input, expected):
     ''' tests string match for a thousand '''
-    is_found = utils.match(data_us.thousand, input, re.VERBOSE) is not None
-    assert is_found == expected
+    execute_matching_test(input, expected, data_us.thousand)
 
 
 @pytest.mark.parametrize("input,expected", [
@@ -104,16 +111,6 @@ def test_thousand(input, expected):
     ("256 ", True),
     ("1256 ", True),
     ("32457 ", True),
-])
-def test_street_number_positive(input, expected):
-    ''' tests positive exact string match for a street number '''
-    match = utils.match(data_us.street_number, input, re.VERBOSE)
-    is_found = match is not None
-    # check for exact match
-    assert (is_found == expected) and (match.group(0) == input)
-
-
-@pytest.mark.parametrize("input,expected", [
     # negative assertions (words)
     ("ONE THousszz22and FIFTY and four onde", False),
     ("ONE one oNe and onE Three", False),
@@ -123,15 +120,9 @@ def test_street_number_positive(input, expected):
     ("1111ss11", False),
     ("123 456", False),
 ])
-def test_street_number_negative(input, expected):
-    ''' tests negative string match for a street number '''
-    match = utils.match(data_us.street_number, input, re.VERBOSE)
-    is_found = match is not None
-    """we check that:
-       - input should not to match our regex
-       - our match should be partial if regex matches some part of string
-    """
-    assert (is_found == expected) or (match.group(0) != input)
+def test_street_number(input, expected):
+    ''' tests string match for a street number '''
+    execute_matching_test(input, expected, data_us.street_number)
 
 
 @pytest.mark.parametrize("input,expected", [
@@ -141,33 +132,14 @@ def test_street_number_negative(input, expected):
     ("First ", True),
     ("Ave 123 ", True),
     ("Northeast 5 ", True),
-])
-def test_street_name_positive(input, expected):
-    ''' tests positive exact string match for a street name '''
-    match = utils.match(data_us.street_name, input, re.VERBOSE)
-    is_found = match is not None
-    """we check that:
-       - input should not to match our regex
-       - our match should be partial if regex matches some part of string
-    """
-    assert (is_found == expected) and (match.group(0) == input)
-
-
-@pytest.mark.parametrize("input,expected", [
     # negative assertions
     ("Northeast Kentucky Industrial Maple ", False),
     ("a", False),
     ("ab", False),
 ])
-def test_street_name_negative(input, expected):
+def test_street_name(input, expected):
     ''' tests positive string match for a street name '''
-    match = utils.match(data_us.street_number, input, re.VERBOSE)
-    is_found = match is not None
-    """we check that:
-       - input should not to match our regex
-       - our match should be partial if regex matches some part of string
-    """
-    assert (is_found == expected) or (match.group(0) != input)
+    execute_matching_test(input, expected, data_us.street_name)
 
 
 @pytest.mark.parametrize("input,expected", [
@@ -187,9 +159,7 @@ def test_street_name_negative(input, expected):
 ])
 def test_post_direction(input, expected):
     ''' tests string match for a post_direction '''
-    is_found = utils.match(data_us.post_direction, input, re.VERBOSE)\
-        is not None
-    assert is_found == expected
+    execute_matching_test(input, expected, data_us.post_direction)
 
 
 @pytest.mark.parametrize("input,expected", [
@@ -210,15 +180,15 @@ def test_post_direction(input, expected):
     ("LP. (Route A1 )", True),
     ("Street route 5 ", True),
     ("blvd", True),
+    ("Estate", True),
+    ("Manor", True),
     # negative assertions
     # TODO
 
 ])
 def test_street_type(input, expected):
     ''' tests string match for a street id '''
-    is_found = utils.match(data_us.street_type, input, re.VERBOSE)\
-        is not None
-    assert is_found == expected
+    execute_matching_test(input, expected, data_us.street_type)
 
 
 @pytest.mark.parametrize("input,expected", [
@@ -237,9 +207,7 @@ def test_street_type(input, expected):
 ])
 def test_floor(input, expected):
     ''' tests string match for a floor '''
-    is_found = utils.match(data_us.floor, input, re.VERBOSE)\
-        is not None
-    assert is_found == expected
+    execute_matching_test(input, expected, data_us.floor)
 
 
 @pytest.mark.parametrize("input,expected", [
@@ -249,6 +217,7 @@ def test_floor(input, expected):
     ("bldg 2 ", True),
     ("building 3 ", True),
     ("building 100 ", True),
+    ("building 1000 ", True),
     ("Building ", True),
     ("building one ", True),
     ("Building three ", True),
@@ -256,13 +225,12 @@ def test_floor(input, expected):
     ("bldg", False),
     ("bldgm", False),
     ("bldg100 ", False),
+    ("building 10000 ", False),
 
 ])
 def test_building(input, expected):
     ''' tests string match for a building '''
-    is_found = utils.match(data_us.building, input, re.VERBOSE)\
-        is not None
-    assert is_found == expected
+    execute_matching_test(input, expected, data_us.building)
 
 
 @pytest.mark.parametrize("input,expected", [
@@ -286,25 +254,14 @@ def test_building(input, expected):
     ("Apt 1B ", True),
     ("Rm. 52 ", True),
     ("#2b ", True),
-])
-def test_occupancy_positive(input, expected):
-    ''' tests exact string match for a place id '''
-    match = utils.match(data_us.occupancy, input, re.VERBOSE)
-    is_found = match is not None
-    assert (is_found == expected) and (match.group(0) == input)
-
-
-@pytest.mark.parametrize("input,expected", [
     # positive assertions
     ("suite900 ", False),
     ("Suite#2", False),
     ("suite218 ", False),
 ])
-def test_occupancy_negative(input, expected):
+def test_occupancy(input, expected):
     ''' tests string match for a place id '''
-    match = utils.match(data_us.occupancy, input, re.VERBOSE)
-    is_found = match is not None
-    assert (is_found == expected)
+    execute_matching_test(input, expected, data_us.occupancy)
 
 
 @pytest.mark.parametrize("input,expected", [
@@ -313,26 +270,15 @@ def test_occupancy_negative(input, expected):
     ("Po Box 53485", True),
     ("P.O. box 119", True),
     ("PO box 1070", True),
-])
-def test_po_box_positive(input, expected):
-    ''' tests exact string match for a po box '''
-    match = utils.match(data_us.po_box, input, re.VERBOSE)
-    is_found = match is not None
-    assert (is_found == expected) and (match.group(0) == input)
-
-
-@pytest.mark.parametrize("input,expected", [
-    # positive assertions
+    # negative assertions
     ("po box108 ", False),
     ("PoBox53485 ", False),
     ("P.O. box119", False),
     ("POb ox1070 ", False),
 ])
-def test_po_box_negative(input, expected):
-    ''' tests string match for a po box '''
-    match = utils.match(data_us.po_box, input, re.VERBOSE)
-    is_found = match is not None
-    assert (is_found == expected)
+def test_po_box_positive(input, expected):
+    ''' tests exact string match for a po box '''
+    execute_matching_test(input, expected, data_us.po_box)
 
 
 @pytest.mark.parametrize("input,expected", [
@@ -392,9 +338,7 @@ def test_po_box_negative(input, expected):
 ])
 def test_full_street_positive(input, expected):
     ''' tests exact string match for a full street '''
-    match = utils.match(data_us.full_street, input, re.VERBOSE)
-    is_found = match is not None
-    assert (is_found == expected) and (match.group(0) == input)
+    execute_matching_test(input, expected, data_us.full_street)
 
 
 @pytest.mark.parametrize("input,expected", [
@@ -461,21 +405,13 @@ def test_full_street_positive(input, expected):
     ("4090 Westown Pkwy Ste B2 Chicago, IL 60614", True),
     ("7000 Peachtree Dunwoody Rd NE Bldg 7, Miami, FL, USA", True),
     ("98-025 Hekaha St Ste 221A, Cityville, Arizona", True),
-    ("225 E. John Carpenter Freeway, Suite 1500 Irving, Texas 75062 U.S.A.",
-        True),
+    ("225 E. John Carpenter Freeway, Suite 1500 Irving, Texas 75062 U.S.A.", True),
     ("643 Lincoln Rd. Miami Beach, FL 33139", True),
     ("300 Market St. Harrisburg, PA 17101", True),
     ("2 Kings Hwy Shreveport, LA 71104", True),
     ("1500 Westlake Avenue North Suite 108 Seattle, WA 98109", True),
-])
-def test_full_address_positive(input, expected):
-    ''' tests exact string match for a full address '''
-    match = utils.match(data_us.full_address, input, re.VERBOSE)
-    is_found = match is not None
-    assert (is_found == expected) and (match.group(0) == input)
-
-
-@pytest.mark.parametrize("input,expected", [
+    ("840 Garrison Brooks Suite 985, New Sarah, OH 38255", True),
+    ("840 Garrison Brooks Suite 985 New Sarah, OH 38255", True),
     # negative assertions
     ("85 STEEL REGULAR SHAFT - NE", False),
     ("3 STRUCTURE WITH PE", False),
@@ -496,11 +432,9 @@ def test_full_address_positive(input, expected):
     ("2 TRACTOR HEAD Actros MP", False),
     ("00 Straight Fit Jean, USA", False),
 ])
-def test_full_address_negative(input, expected):
-    ''' tests string match for a full address '''
-    match = utils.match(data_us.full_address, input, re.VERBOSE)
-    is_found = match is not None
-    assert is_found == expected
+def test_full_address(input, expected):
+    ''' tests exact string match for a full address '''
+    execute_matching_test(input, expected, data_us.full_address)
 
 
 @pytest.mark.parametrize("input,expected", [
@@ -508,16 +442,7 @@ def test_full_address_negative(input, expected):
     ("75062", True),
     ("15032", True),
     ("95130-6482", True),
-])
-def test_postal_code_positive(input, expected):
-    ''' test exact string match for postal code '''
-    match = utils.match(data_us.postal_code, input, re.VERBOSE)
-    is_found = match is not None
-    assert is_found == expected and match.group(0) == input
-
-
-@pytest.mark.parametrize("input,expected", [
-    # positive assertions
+    # negative assertions
     ("1", False),
     ("23", False),
     ("456", False),
@@ -526,11 +451,9 @@ def test_postal_code_positive(input, expected):
     ("95130-642", False),
     ("95130-64212", False),
 ])
-def test_postal_code_negative(input, expected):
+def test_postal_code(input, expected):
     ''' test exact string match for postal code '''
-    match = utils.match(data_us.postal_code, input, re.VERBOSE)
-    is_found = match is not None
-    assert (is_found == expected) or (match.group(0) != input)
+    execute_matching_test(input, expected, data_us.postal_code)
 
 
 @pytest.mark.parametrize("input,expected", [
@@ -544,9 +467,7 @@ def test_postal_code_negative(input, expected):
 ])
 def test_region1(input, expected):
     ''' test exact string match for province '''
-    match = utils.match(data_us.region1, input, re.VERBOSE)
-    is_found = match is not None
-    assert is_found == expected and match.group(0) == input
+    execute_matching_test(input, expected, data_us.region1)
 
 
 @pytest.mark.parametrize("input,expected", [
@@ -557,6 +478,4 @@ def test_region1(input, expected):
 ])
 def test_country(input, expected):
     ''' test exact string match for country '''
-    match = utils.match(data_us.country, input, re.VERBOSE)
-    is_found = match is not None
-    assert is_found == expected and match.group(0) == input
+    execute_matching_test(input, expected, data_us.country)

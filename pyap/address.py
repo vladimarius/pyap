@@ -20,7 +20,7 @@ class Address(object):
         keys = []
         vals = []
         for k, v in six.iteritems(args):
-            if v:
+            if v and isinstance(v, str):
                 v = v.strip(' ,;:')
             # create object variables
             setattr(self, k, v)
@@ -35,7 +35,11 @@ class Address(object):
 
     def __repr__(self):
         # Address object is represented as textual address
-        address = self.full_address
+        address = ''
+        try:
+            address = self.full_address
+        except AttributeError:
+            pass
         if six.PY2:
             address = address.encode('utf-8')
         return address
