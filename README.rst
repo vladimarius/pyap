@@ -54,7 +54,6 @@ in text in real time with low error rates.
 
 Future work
 -----------
-- Add rules for parsing UK addresses
 - Add rules for parsing FR addresses
 - ...
 

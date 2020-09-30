@@ -11,6 +11,7 @@ setup(name='pyap',
       description='Library for detecting and parsing addresses.'
       ' Currently supports US, Canadian and British addresses.',
       long_description=readme(),
+      long_description_content_type="text/x-rst",
       keywords='address detection, address parsing',
       url='http://github.com/vladimarius/pyap',
       author='Vladimir Goncharov',

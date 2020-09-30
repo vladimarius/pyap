@@ -1,9 +1,11 @@
 [tool.poetry]
 name = "pyap"
-version = "0.3.0"
+version = "0.3.1"
 description = "Pyap is an MIT Licensed text processing library, written in Python, for detecting and parsing addresses. Currently it supports USA, Canadian and British addresses."
 authors = ["Vladimir Goncharov <vladimarius@gmail.com>"]
+documentation = "https://github.com/vladimarius/pyap"
 license = "MIT"
+readme="README.rst"
 
 [tool.poetry.dependencies]
 python = ">=2.7"
