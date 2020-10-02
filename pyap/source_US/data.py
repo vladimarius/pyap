@@ -109,14 +109,14 @@ street_name = r"""(?P<street_name>
 post_direction = r"""
                     (?P<post_direction>
                         (?:
-                            [Nn][Oo][Rr][Tt][Hh]\ |
-                            [Ss][Oo][Uu][Tt][Hh]\ |
-                            [Ee][Aa][Ss][Tt]\ |
-                            [Ww][Ee][Ss][Tt]\ 
+                            [Nn][Oo][Rr][Tt][Hh]|
+                            [Ss][Oo][Uu][Tt][Hh]|
+                            [Ee][Aa][Ss][Tt]|
+                            [Ww][Ee][Ss][Tt]
                         )
                         |
                         (?:
-                            NW\ |NE\ |SW\ |SE\ 
+                            NW|NE|SW|SE
                         )
                         |
                         (?:
