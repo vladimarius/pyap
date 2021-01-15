@@ -461,7 +461,7 @@ def test_country(input, expected):
     # positive assertions
     ("11-59 High Road, East Finchley London, N2 8AW", True),
     ("88 White parkway, Stanleyton, L2 3DB", True),
-    ("Studio 96D, Graham roads, Westtown, L1A 3GP, Great Britain", True),
+    ("Studio 96D, Graham roads, Westtown, L1 3GP, Great Britain", True),
     ("01 Brett mall, Lake Donna, W02 3JQ", True),
     ("Flat 05, Byrne shores, Howardshire, GL6 8EA, UK", True),
     ("12 Henry route, Clementsborough, W2 5DQ", True),
