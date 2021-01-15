@@ -4,6 +4,10 @@
 
 import re
 import pytest
+import pandas as pd
+import pathlib
+import zipfile
+import requests
 import itertools
 import pyap
 import pyap.parser
@@ -392,6 +396,31 @@ def test_postal_code(input, expected):
     execute_matching_test(input, expected, data_gb.postal_code)
 
 
+def test_postal_code_extensive():
+    """Test post code regex against a list of all post codes."""
+    zip_location = pathlib.Path(__file__).parent / 'code_point_uk_post_codes.zip'
+
+    # Download an extensive list of all postcodes
+    if not zip_location.exists():
+        url = 'https://api.os.uk/downloads/v1/products/CodePointOpen/downloads?area=GB&format=CSV&redirect'
+        r = requests.get(url, allow_redirects=True)
+        with open(zip_location.name, 'wb') as f:
+            f.write(r.content)
+
+    # Run the detector against this list to ensure we pickup all post codes
+    with zipfile.ZipFile(zip_location.name) as zip:
+        data_file_names = [
+            name for name in zip.namelist()
+            if name.lower().endswith('.csv') and name.startswith('Data/CSV')
+        ]
+        for data_file_name in data_file_names:
+            with zip.open(data_file_name) as data_file:
+                df = pd.read_csv(data_file, header=None)
+                post_codes = df.loc[:, 0].values.tolist()
+                for post_code in post_codes:
+                    execute_matching_test(post_code, True, data_gb.postal_code)
+
+
 @pytest.mark.parametrize("input,expected", [
     # positive assertions
     ("Montana", True),
@@ -432,7 +461,7 @@ def test_country(input, expected):
     # positive assertions
     ("11-59 High Road, East Finchley London, N2 8AW", True),
     ("88 White parkway, Stanleyton, L2 3DB", True),
-    ("Studio 96D, Graham roads, Westtown, L1A 3GP, Great Britain", True),
+    ("Studio 96D, Graham roads, Westtown, L1 3GP, Great Britain", True),
     ("01 Brett mall, Lake Donna, W02 3JQ", True),
     ("Flat 05, Byrne shores, Howardshire, GL6 8EA, UK", True),
     ("12 Henry route, Clementsborough, W2 5DQ", True),
