@@ -81,7 +81,6 @@ def test_parse_address():
     test_address = "xxx 225 E. John Carpenter Freeway, " +\
         "Suite 1500 Irving, Texas 75062 xxx"
 
-
     addresses = ap.parse(test_address)
     assert addresses[0].full_address == \
         "225 E. John Carpenter Freeway, Suite 1500 Irving, Texas 75062"
