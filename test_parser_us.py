@@ -412,6 +412,8 @@ def test_full_street_positive(input, expected):
     ("1500 Westlake Avenue North Suite 108 Seattle, WA 98109", True),
     ("840 Garrison Brooks Suite 985, New Sarah, OH 38255", True),
     ("840 Garrison Brooks Suite 985 New Sarah, OH 38255", True),
+    ("5545 Langston Blvd, Floor 2, Arlington, VA 22207", True),
+    ("5545 Langston Blvd., 2nd Floor, Arlington, VA 22207", True),
     # negative assertions
     ("85 STEEL REGULAR SHAFT - NE", False),
     ("3 STRUCTURE WITH PE", False),
