@@ -387,6 +387,8 @@ still finding correct matches in full_address
     ("3351, boul. des Forges C.P. 500, Trois-Rivières (Québec)"
         " Canada, G9A 5H7", True),
     ("3264 Mainway Burlington L7M 1A7 Ontario, Canada", True),
+    ("20 Fleeceline Road, Floor 3, Toronto, Ontario M8V 2K3", True),
+    ("20 Fleeceline Road, 3rd Floor, Toronto, Ontario M8V 2K3", True),
 ])
 def test_full_address_positive(input, expected):
     ''' tests exact string match for a full address '''

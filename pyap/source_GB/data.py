@@ -217,11 +217,11 @@ street_type = r"""
 floor = r"""
                     (?P<floor>
                         (?:
-                        \d+[A-Za-z]{0,2}\.?\ [Ff][Ll][Oo][Oo][Rr]\ 
+                        \d+[A-Za-z]{0,2}\.?\ [Ff][Ll][Oo][Oo][Rr]\ ?
                         )
                         |
                         (?:
-                            [Ff][Ll][Oo][Oo][Rr]\ \d+[A-Za-z]{0,2}\ 
+                            [Ff][Ll][Oo][Oo][Rr]\ \d+[A-Za-z]{0,2}\ ?
                         )
                     )  # end floor
 """
