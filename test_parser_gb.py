@@ -447,6 +447,8 @@ def test_country(input, expected):
     ("No. 22 The Light, The Headrow, Leeds LS1 8TL", True),
     ("55 Glenfada Park, Londonderry BT48 9DR", True),
     ("Studio 53, Harrison cove, Smithbury, G88 4US", True),
+    ("Floor 4, 32 London Bridge St, London SE1 9SG", True),
+    ("4th Floor, 32 London Bridge St, London SE1 9SG", True),
     # negative assertions
     ("85 STEEL REGULAR SHAFT - NE", False),
     ("3 STRUCTURE WITH PE", False),
