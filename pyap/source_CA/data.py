@@ -16,12 +16,12 @@
 
 import re
 
-''' Numerals from one to nine
+""" Numerals from one to nine
 Note: here and below we use syntax like '[Oo][Nn][Ee]'
 instead of '(one)(?i)' to match 'One' or 'oNe' because
 Python Regexps don't seem to support turning On/Off
 case modes for subcapturing groups.
-'''
+"""
 zero_to_nine = r"""(?:
     [Zz][Ee][Rr][Oo]\ |[Oo][Nn][Ee]\ |[Tt][Ww][Oo]\ |
     [Tt][Hh][Rr][Ee][Ee]\ |[Ff][Oo][Uu][Rr]\ |
@@ -62,7 +62,7 @@ thousand = r"""(?:
     [Tt][Hh][Oo][Uu][Ss][Aa][Nn][Dd]\ 
     )"""
 
-'''
+"""
 Regexp for matching street number.
 Street number can be written 2 ways:
 1) Using letters - "One thousand twenty two"
@@ -72,7 +72,7 @@ Street number can be written 2 ways:
         "85 - 1190"
         "85th - 1190"
    c) - "85 1190"
-'''
+"""
 street_number = r"""(?<![\.0-9])(?P<street_number>
                         (?:
                             [Aa][Nn][Dd]\ 
@@ -94,17 +94,19 @@ street_number = r"""(?<![\.0-9])(?P<street_number>
                         # 45
                         (?:\d{from_to}(?=[\ ,]))
                     )
-                """.format(thousand=thousand,
-                           hundred=hundred,
-                           zero_to_nine=zero_to_nine,
-                           ten_to_ninety=ten_to_ninety,
-                           from_to='{1,5}')
+                """.format(
+    thousand=thousand,
+    hundred=hundred,
+    zero_to_nine=zero_to_nine,
+    ten_to_ninety=ten_to_ninety,
+    from_to="{1,5}",
+)
 
-'''
+"""
 Regexp for matching street name.
 In example below:
 "Hoover Boulevard": "Hoover" is a street name
-'''
+"""
 street_name = r"""(?P<street_name>
                   \w[\w0-9\'\-\ \.]{0,30}?
                  )
@@ -147,7 +149,9 @@ post_direction = r"""
                             O[\.\ ]
                         )
                     )
-                """.format(d='[\ ,]')
+                """.format(
+    d="[\ ,]"
+)
 
 # Regexp for matching street type
 # According to
@@ -304,7 +308,9 @@ street_type = r"""
                 [\(\ \,]{route_symbols}
                 [Rr][Oo][Uu][Tt][Ee]\ [A-Za-z0-9]+[\)\ \,]{route_symbols}
             )?
-            """.format(div="[\.\ ,]{0,2}", route_symbols='{0,3}')
+            """.format(
+    div="[\.\ ,]{0,2}", route_symbols="{0,3}"
+)
 
 floor = r"""
             (?P<floor>
@@ -390,14 +396,14 @@ po_box = r"""
             )
         """
 
-'''Define detection rules for a second type of address format
+"""Define detection rules for a second type of address format
    (the French one)
-'''
-street_number_b = re.sub('<([a-z\_]+)>', r'<\1_b>', street_number)
-street_name_b = re.sub('<([a-z\_]+)>', r'<\1_b>', street_name)
-street_type_b = re.sub('<([a-z\_]+)>', r'<\1_b>', street_type)
-po_box_b = re.sub('<([a-z\_]+)>', r'<\1_b>', po_box)
-post_direction_b = re.sub('<([a-z\_]+)>', r'<\1_b>', post_direction)
+"""
+street_number_b = re.sub("<([a-z\_]+)>", r"<\1_b>", street_number)
+street_name_b = re.sub("<([a-z\_]+)>", r"<\1_b>", street_name)
+street_type_b = re.sub("<([a-z\_]+)>", r"<\1_b>", street_type)
+po_box_b = re.sub("<([a-z\_]+)>", r"<\1_b>", po_box)
+post_direction_b = re.sub("<([a-z\_]+)>", r"<\1_b>", post_direction)
 
 po_box_positive_lookahead = r"""
             (?=
@@ -451,28 +457,23 @@ full_street = r"""
 
             {po_box}?
         )
-    )""".format(street_number=street_number,
-                street_number_b=street_number_b,
-
-                street_name=street_name,
-                street_name_b=street_name_b,
-
-                street_type=street_type,
-                street_type_b=street_type_b,
-
-                post_direction=post_direction,
-                post_direction_b=post_direction_b,
-
-                floor=floor,
-                building=building,
-                occupancy=occupancy,
-
-                po_box=po_box,
-                po_box_b=po_box_b,
-                po_box_positive_lookahead=po_box_positive_lookahead,
-
-                div='[\ ,]{1,2}',
-                )
+    )""".format(
+    street_number=street_number,
+    street_number_b=street_number_b,
+    street_name=street_name,
+    street_name_b=street_name_b,
+    street_type=street_type,
+    street_type_b=street_type_b,
+    post_direction=post_direction,
+    post_direction_b=post_direction_b,
+    floor=floor,
+    building=building,
+    occupancy=occupancy,
+    po_box=po_box,
+    po_box_b=po_box_b,
+    po_box_positive_lookahead=po_box_positive_lookahead,
+    div="[\ ,]{1,2}",
+)
 
 # region1 here is actually a "province"
 region1 = r"""
@@ -543,8 +544,8 @@ country = r"""
             """
 
 # define detection rules for postal code placed in different parts of address
-postal_code_b = re.sub('<([a-z\_]+)>', r'<\1_b>', postal_code)
-postal_code_c = re.sub('<([a-z\_]+)>', r'<\1_c>', postal_code)
+postal_code_b = re.sub("<([a-z\_]+)>", r"<\1_b>", postal_code)
+postal_code_c = re.sub("<([a-z\_]+)>", r"<\1_c>", postal_code)
 
 full_address = r"""
                 (?P<full_address>
@@ -561,13 +562,11 @@ full_address = r"""
                 )
                 """.format(
     full_street=full_street,
-    div='[\, ]{,2}',
+    div="[\, ]{,2}",
     city=city,
     region1=region1,
-
     country=country,
     country_b=country,
-
     postal_code=postal_code,
     postal_code_b=postal_code_b,
     postal_code_c=postal_code_c,

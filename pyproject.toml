@@ -8,10 +8,47 @@ license = "MIT"
 readme="README.rst"
 
 [tool.poetry.dependencies]
-python = ">=2.7"
+python = ">=3.9,<3.11"
+taskipy = "^1.2.1"
 
 [tool.poetry.dev-dependencies]
+black = "*"
+flake8 = "*"
+flake8-bugbear = "*"
+yamllint = "*"
+pytest = "^7.1.2"
+
+[tool.taskipy.tasks]
+lint = "flake8"
+yamllint = "yamllint ."
+run_pyright = "(npm list -g pyright@1.1.245 || npm install -g pyright@1.1.245) && pyright"
+check_types = "task run_pyright"
+check_fmt = "black --check ."
+fmt = "black ."
+test = "pytest tests -vvv"
+check = "task lint && task yamllint && task check_fmt && task check_types && task test"
+
+[tool.pyright]
+pythonVersion = "3.10"
+reportIncompatibleVariableOverride = true
+strictListInference = true
+strictDictionaryInference = true
+strictSetInference = true
+reportUnusedImport = true
+reportDuplicateImport = true
+reportWildcardImportFromLibrary = true
+reportOptionalMemberAccess = true
+reportUntypedBaseClass = true
+reportPrivateUsage = true
+reportUntypedClassDecorator = true
+reportConstantRedefinition = true
+reportInvalidTypeVarUse = true
+reportUnnecessaryIsInstance = true
+reportUnnecessaryCast = true
+reportUnnecessaryComparison = true
+reportAssertAlwaysTrue = true
+reportUnusedCoroutine = true
 
 [build-system]
-requires = ["poetry>=0.12"]
+requires = ["poetry>=1.1.8"]
 build-backend = "poetry.masonry.api"

@@ -1,0 +1,13 @@
+---
+extends: default
+
+rules:
+  # Disable requirement for `---` at the beginning of each file
+  document-start: disable
+
+  indentation:
+    indent-sequences: false
+
+  line-length:
+    max: 100
+    level: warning
