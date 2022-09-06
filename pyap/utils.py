@@ -11,60 +11,32 @@
 """
 
 import re
-from .packages import six
+from typing import Any, List, Union
 
 DEFAULT_FLAGS = re.VERBOSE | re.UNICODE
 
-if six.PY2:
 
-    def match(regex, string, flags=DEFAULT_FLAGS):
-        '''Utility function for re.match '''
-        if isinstance(string, str):
-            string = unicode(string, 'utf-8')
-        return re.match(
-            unicode(regex, 'utf-8'),
-            string,
-            flags=flags
-        )
+def match(
+    regex: Union[str, re.Pattern[str]], string: str, flags: re.RegexFlag = DEFAULT_FLAGS
+) -> Union[re.Match[str], None]:
+    """Utility function for re.match"""
+    return re.match(regex, string, flags=flags)
 
-    def findall(regex, string, flags=DEFAULT_FLAGS):
-        '''Utility function for re.findall '''
-        if isinstance(string, str):
-            string = unicode(string, 'utf-8')
-        return re.findall(
-            unicode(regex, 'utf-8'),
-            string,
-            flags=flags
-        )
 
-    def finditer(regex, string, flags=DEFAULT_FLAGS):
-        '''Utility function for re.finditer '''
-        if isinstance(string, str):
-            string = unicode(string, 'utf-8')
-        return list(re.finditer(
-            unicode(regex, 'utf-8'),
-            string,
-            flags=flags
-        ))
+def findall(
+    regex: Union[str, re.Pattern[str]], string: str, flags: re.RegexFlag = DEFAULT_FLAGS
+) -> List[Any]:
+    """Utility function for re.findall"""
+    return re.findall(regex, string, flags=flags)
 
-    def unicode_str(string):
-        '''Return Unicode string'''
-        return unicode(string, 'utf-8')
 
-elif six.PY3:
+def finditer(
+    regex: Union[str, re.Pattern[str]], string: str, flags: re.RegexFlag = DEFAULT_FLAGS
+) -> List[re.Match[str]]:
+    """Utility function for re.finditer"""
+    return list(re.finditer(regex, string, flags=flags))
 
-    def match(regex, string, flags=DEFAULT_FLAGS):
-        '''Utility function for re.match '''
-        return re.match(regex, string, flags=flags)
 
-    def findall(regex, string, flags=DEFAULT_FLAGS):
-        '''Utility function for re.findall '''
-        return re.findall(regex, string, flags=flags)
-
-    def finditer(regex, string, flags=DEFAULT_FLAGS):
-        '''Utility function for re.finditer '''
-        return list(re.finditer(regex, string, flags=flags))
-
-    def unicode_str(string):
-        '''Return Unicode string'''
-        return string
+def unicode_str(string: str) -> str:
+    """Return Unicode string"""
+    return string

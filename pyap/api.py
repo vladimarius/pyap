@@ -10,12 +10,15 @@
     :license: MIT, see LICENSE for more details.
 """
 
+from typing import Literal, List
+
 from . import parser
+from . import address
 
 
-def parse(some_text, **kwargs):
+def parse(some_text: str, country: Literal["US", "GB", "CA"]) -> List[address.Address]:
     """Creates request to AddressParser
     and returns list of Address objects
     """
-    ap = parser.AddressParser(**kwargs)
+    ap = parser.AddressParser(country)
     return ap.parse(some_text)

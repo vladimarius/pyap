@@ -15,12 +15,12 @@
 """
 
 
-'''Numerals from one to nine
+"""Numerals from one to nine
 Note: here and below we use syntax like '[Oo][Nn][Ee]'
 instead of '(one)(?i)' to match 'One' or 'oNe' because
 Python Regexps don't seem to support turning On/Off
 case modes for subcapturing groups.
-'''
+"""
 zero_to_nine = r"""
                                 (?:
                                     [Zz][Ee][Rr][Oo]\ |[Oo][Nn][Ee]\ |[Tt][Ww][Oo]\ |
@@ -68,10 +68,12 @@ thousand = r"""
                                 )
 """
 
-part_divider = r'(?: [\,\ \.\-]{0,3}\,[\,\ \.\-]{0,3} )'
-space_pattern = r'(?: [\ \t]{1,3} )'  # TODO: use \b for word boundary and \s for whitespace
+part_divider = r"(?: [\,\ \.\-]{0,3}\,[\,\ \.\-]{0,3} )"
+space_pattern = (
+    r"(?: [\ \t]{1,3} )"  # TODO: use \b for word boundary and \s for whitespace
+)
 
-'''
+"""
 Regexp for matching street number.
 Street number can be written 2 ways:
 1) Using letters - "One thousand twenty two"
@@ -79,7 +81,7 @@ Street number can be written 2 ways:
    a) - "1022"
    b) - "85-1190"
    c) - "85 1190"
-'''
+"""
 street_number = r"""
                     (?P<street_number>
                         (?:
@@ -119,15 +121,15 @@ street_number = r"""
     zero_to_nine=zero_to_nine,
     ten_to_ninety=ten_to_ninety,
     space=space_pattern,
-    from_to='{1,5}',
+    from_to="{1,5}",
 )
 
-'''
+"""
 Regexp for matching street name.
 In "Hoover Boulevard", "Hoover" is a street name
 Seems like the longest US street is 'Northeast Kentucky Industrial Parkway' - 31 charactors
 https://atkinsbookshelf.wordpress.com/tag/longest-street-name-in-us/
-'''
+"""
 street_name = r"""
                     (?P<street_name>
                         (?(street_number)           # If street_number has been found, then digits can
@@ -211,7 +213,7 @@ street_type = r"""
                         (?P<route_id>)
                     )  # end street_type
 """.format(
-    route_symbols=r'{0,3}',
+    route_symbols=r"{0,3}",
 )
 
 floor = r"""

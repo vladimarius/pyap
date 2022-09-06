@@ -11,35 +11,42 @@
     :license: MIT, see LICENSE for more details.
 """
 
-from .packages import six
+from dataclasses import dataclass
+from typing import Union
 
 
-class Address(object):
+@dataclass
+class Address:
+    match_end: int
+    match_start: int
 
-    def __init__(self, **args):
-        keys = []
-        vals = []
-        for k, v in six.iteritems(args):
-            if v and isinstance(v, str):
-                v = v.strip(' ,;:')
-            # create object variables
-            setattr(self, k, v)
-            # prepare for dict
-            keys.append(k)
-            vals.append(v)
-        self.data_as_dict = dict(zip(keys, vals))
+    country_id: str
+    full_street: str
+    full_address: str
+    city: Union[str, None] = None
+    floor: Union[str, None] = None
+    region1: Union[str, None] = None
+    country: Union[str, None] = None
+    route_id: Union[str, None] = None
+    occupancy: Union[str, None] = None
+    street_type: Union[str, None] = None
+    building_id: Union[str, None] = None
+    postal_code: Union[str, None] = None
+    street_name: Union[str, None] = None
+    street_number: Union[str, None] = None
+    post_direction: Union[str, None] = None
 
-    def as_dict(self):
-        # Return parsed address parts as a dictionary
-        return self.data_as_dict
+    def __post_init__(self):
+        for s_field in self.__dataclass_fields__:
+            field = getattr(self, s_field)
+            if isinstance(field, str):
+                setattr(self, s_field, field.strip(" ,;:"))
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         # Address object is represented as textual address
-        address = ''
+        address = ""
         try:
             address = self.full_address
         except AttributeError:
             pass
-        if six.PY2:
-            address = address.encode('utf-8')
         return address
