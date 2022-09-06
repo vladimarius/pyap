@@ -15,6 +15,17 @@
 """
 
 import string
+from typing import List
+
+
+def str_list_to_upper_lower_regex(str_list: List[str]) -> str:
+    regex = "|".join(set(str_list)).lower()
+    for letter in string.ascii_lowercase:
+        regex = regex.replace(
+            letter, "[{upper}{lower}]".format(upper=letter.upper(), lower=letter)
+        )
+
+    return regex
 
 
 """Numerals from one to nine
@@ -108,21 +119,36 @@ street_name = r"""(?P<street_name>
                  )
               """
 
+
+single_street_name_list = [
+    "Highpoint",
+]
+
+
+# Used to handle edge cases where streets don't have a street type:
+# eg. `55 HIGHPOINT
+single_street_name = r"""(?:
+    {single_street_name_regex})
+""".format(
+    single_street_name_regex=str_list_to_upper_lower_regex(single_street_name_list)
+)
+
+
 post_direction = r"""
                     (?P<post_direction>
                         (?:
-                            [Nn][Oo][Rr][Tt][Hh]\ |
-                            [Ss][Oo][Uu][Tt][Hh]\ |
-                            [Ee][Aa][Ss][Tt]\ |
-                            [Ww][Ee][Ss][Tt]\ 
+                            [Nn][Oo][Rr][Tt][Hh]|
+                            [Ss][Oo][Uu][Tt][Hh]|
+                            [Ee][Aa][Ss][Tt]|
+                            [Ww][Ee][Ss][Tt]
                         )
                         |
                         (?:
-                            NW\ |NE\ |SW\ |SE\ 
+                            NW|NE|SW|SE
                         )
                         |
                         (?:
-                            N\.?\ |S\.?\ |E\.?\ |W\.?\ 
+                            N\.?|S\.?|E\.?|W\.?
                         )
                     )
                 """
@@ -686,11 +712,7 @@ street_type_list = [
 
 def street_type_list_to_regex(street_type_list):
     """Converts a list of street types into a regex"""
-    street_types = "|".join(set(street_type_list)).lower()
-    for letter in string.ascii_lowercase:
-        street_types = street_types.replace(
-            letter, "[{upper}{lower}]".format(upper=letter.upper(), lower=letter)
-        )
+    street_types = str_list_to_upper_lower_regex(street_type_list)
 
     # Use \b to check that there are word boundaries before and after the street type
     # Optionally match zero to two of " ", ",", or "." after the street name
@@ -796,19 +818,30 @@ po_box = r"""
 full_street = r"""
     (?:
         (?P<full_street>
-            {street_number}
-            {street_name}?\,?\ ?
-            (?:[\ \,]{street_type})\,?\ ?
-            {post_direction}?\,?\ ?
-            {floor}?\,?\ ?
-            {building}?\,?\ ?
-            {occupancy}?\,?\ ?
-            {po_box}?
+            (?:
+                {street_number}
+                (?:
+                    (?:
+                        {street_name}?\,?\ ?
+                        (?:[\ \,]{street_type})\,?\s?
+                    )
+                    |
+                    (?:{single_street_name})\,?\s?
+                )
+                (?:{post_direction}[,\s])?
+                {floor}?\,?\s?
+                {building}?\,?\s?
+                {occupancy}?\,?\s?
+                {po_box}?
+            )
+            |
+            (?:{po_box})
         )
     )""".format(
     street_number=street_number,
     street_name=street_name,
     street_type=street_type,
+    single_street_name=single_street_name,
     post_direction=post_direction,
     floor=floor,
     building=building,
@@ -816,18 +849,77 @@ full_street = r"""
     po_box=po_box,
 )
 
+
+def _abbrs_with_optional_dots() -> List[str]:
+    state_abbrs = [
+        "AL",
+        "AK",
+        "AZ",
+        "AR",
+        "CA",
+        "CO",
+        "CT",
+        "DE",
+        "DC",
+        "FL",
+        "GA",
+        "HI",
+        "ID",
+        "IL",
+        "IN",
+        "IA",
+        "KS",
+        "KY",
+        "LA",
+        "ME",
+        "MD",
+        "MA",
+        "MI",
+        "MN",
+        "MS",
+        "MO",
+        "MT",
+        "NE",
+        "NV",
+        "NH",
+        "NJ",
+        "NM",
+        "NY",
+        "NC",
+        "ND",
+        "OH",
+        "OK",
+        "OR",
+        "PA",
+        "RI",
+        "SC",
+        "SD",
+        "TN",
+        "TX",
+        "UT",
+        "VT",
+        "VA",
+        "WA",
+        "WV",
+        "WI",
+        "WY",
+        # unincorporated & commonwealth territories
+        "AS",
+        "GU",
+        "MP",
+        "PR",
+        "VI",
+    ]
+
+    def to_abbr_with_optional_dots(abbr: str) -> str:
+        return "".join(c + r"\.?" for c in abbr)
+
+    return [to_abbr_with_optional_dots(abbr) for abbr in state_abbrs]
+
+
 # region1 is actually a "state"
 region1 = r"""
         (?P<region1>
-            (?:
-                # states abbreviations
-                AL|AK|AZ|AR|CA|CO|CT|DE|DC|FL|GA|HI|ID|IL|IN|IA|KS|KY|LA|ME|MD|MA|MI|
-                MN|MS|MO|MT|NE|NV|NH|NJ|NM|NY|NC|ND|OH|OK|OR|PA|RI|SC|SD|TN|TX|UT|VT|
-                VA|WA|WV|WI|WY|
-                # unincorporated & commonwealth territories
-                AS|GU|MP|PR|VI
-            )
-            |
             (?:
                 # states full
                 [Aa][Ll][Aa][Bb][Aa][Mm][Aa]|
@@ -890,8 +982,15 @@ region1 = r"""
                 [Pp][Uu][Ee][Rr][Tt][Oo]\ [Rr][Ii][Cc][Oo]|
                 [Vv][Ii][Rr][Gg][Ii][Nn]\ [Ii][Ss][Ll][Aa][Nn][Dd][Ss]
             )
+            |
+            (?:
+                # states abbreviations
+                {abbrs_with_optional_dots}
+            )
         )
-        """
+        """.format(
+    abbrs_with_optional_dots="|".join(_abbrs_with_optional_dots())
+)
 
 # TODO: doesn't catch cities containing French characters
 city = r"""
@@ -924,7 +1023,7 @@ full_address = r"""
                 )
                 """.format(
     full_street=full_street,
-    div=r"[\, ]{,2}",
+    div=r"[\, -]{,2}",
     city=city,
     region1=region1,
     country=country,

@@ -163,18 +163,18 @@ def test_street_name(input, expected):
     "input,expected",
     [
         # positive assertions
-        ("N. ", True),
-        ("N ", True),
-        ("S ", True),
-        ("West ", True),
-        ("eASt ", True),
-        ("NW ", True),
-        ("SE ", True),
+        ("N.", True),
+        ("N", True),
+        ("S", True),
+        ("West", True),
+        ("eASt", True),
+        ("NW", True),
+        ("SE", True),
         # negative assertions
         ("NW.", False),
-        ("NW. ", False),
-        ("NS ", False),
-        ("EW ", False),
+        ("NW.", False),
+        ("NS", False),
+        ("EW", False),
     ],
 )
 def test_post_direction(input, expected):
