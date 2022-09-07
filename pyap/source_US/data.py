@@ -96,7 +96,7 @@ street_number = r"""(?P<street_number>
                         ){from_to}
                         |
                         (?:\d{from_to}
-                            (?:\ ?\-?\ ?\d{from_to})?\ 
+                            (?:\ ?\-?\ ?(?:\d{from_to}|[A-Z]))?\ 
                         )
                     )
                 """.format(
@@ -120,17 +120,31 @@ street_name = r"""(?P<street_name>
               """
 
 
+interstate_street_type = r"""
+            (?:
+                [Ii]\-\d{1,4}
+                |
+                [Ii][Nn][Tt][Ee][Rr][Ss][Tt][Aa][Tt][Ee]\ *\d{1,4}
+            )
+"""
+
+
 single_street_name_list = [
+    "Broadway",
     "Highpoint",
+    "Parkway",
 ]
 
 
 # Used to handle edge cases where streets don't have a street type:
 # eg. `55 HIGHPOINT
-single_street_name = r"""(?:
-    {single_street_name_regex})
+single_street_name = r"""
+    (?:
+        {single_street_name_regex}|[Aa][Tt]\ {interstate_street_type}
+    )
 """.format(
-    single_street_name_regex=str_list_to_upper_lower_regex(single_street_name_list)
+    single_street_name_regex=str_list_to_upper_lower_regex(single_street_name_list),
+    interstate_street_type=interstate_street_type,
 )
 
 
@@ -727,7 +741,7 @@ def street_type_list_to_regex(street_type_list):
 street_type = r"""
             (?:
                 (?P<street_type>
-                    {street_types}
+                    {street_types}|{interstate_street_type}
                 )
                 (?P<route_id>
                     [\(\ \,]{route_symbols}
@@ -737,6 +751,7 @@ street_type = r"""
 """.format(
     route_symbols="{0,3}",
     street_types=street_type_list_to_regex(street_type_list),
+    interstate_street_type=interstate_street_type,
 )
 
 floor = r"""
@@ -754,9 +769,11 @@ floor = r"""
 building = r"""
             (?P<building_id>
                 (?:
-                    (?:[Bb][Uu][Ii][Ll][Dd][Ii][Nn][Gg])
+                    (?:[Bb][Uu][Ii][Ll][Dd][Ii][Nn][Gg])\.?
                     |
-                    (?:[Bb][Ll][Dd][Gg])
+                    (?:[Bb][Ll][Dd][Gg])\.?
+                    |
+                    (?:[Bb][Ll][Vv])\.?
                 )
                 \ 
                 (?:
@@ -772,7 +789,7 @@ building = r"""
                         {ten_to_ninety}
                     ){{1,5}}
                     |
-                    \d{{0,4}}[A-Za-z]?
+                    \d{{0,4}}(?:\.\d)?[A-Za-z]?
                 )
                 \ ?
             )
@@ -822,13 +839,13 @@ full_street = r"""
                 {street_number}
                 (?:
                     (?:
-                        {street_name}?\,?\ ?
-                        (?:[\ \,]{street_type})\,?\s?
+                        {street_name}?
+                        (?:[\ \,]{street_type})
                     )
                     |
-                    (?:{single_street_name})\,?\s?
-                )
-                (?:{post_direction}[,\s])?
+                    (?:{single_street_name})
+                )\,?\s?
+                (?:(?<!,\ ){post_direction}[,\s])?
                 {floor}?\,?\s?
                 {building}?\,?\s?
                 {occupancy}?\,?\s?
@@ -850,7 +867,7 @@ full_street = r"""
 )
 
 
-def _abbrs_with_optional_dots() -> List[str]:
+def states_abbrvs_regex() -> str:
     state_abbrs = [
         "AL",
         "AK",
@@ -914,7 +931,9 @@ def _abbrs_with_optional_dots() -> List[str]:
     def to_abbr_with_optional_dots(abbr: str) -> str:
         return "".join(c + r"\.?" for c in abbr)
 
-    return [to_abbr_with_optional_dots(abbr) for abbr in state_abbrs]
+    return str_list_to_upper_lower_regex(
+        [to_abbr_with_optional_dots(abbr) for abbr in state_abbrs]
+    )
 
 
 # region1 is actually a "state"
@@ -985,11 +1004,11 @@ region1 = r"""
             |
             (?:
                 # states abbreviations
-                {abbrs_with_optional_dots}
+                {state_abbrvs}
             )
         )
         """.format(
-    abbrs_with_optional_dots="|".join(_abbrs_with_optional_dots())
+    state_abbrvs=states_abbrvs_regex()
 )
 
 # TODO: doesn't catch cities containing French characters
@@ -1015,10 +1034,10 @@ country = r"""
 full_address = r"""
                 (?P<full_address>
                     {full_street} {div}
-                    {city} {div}
+                    {city} [\, -]{{1,2}}
                     {region1} {div}
                     (?:
-                        (?:{postal_code}?(\ ?,?{country})?)
+                        (?:\ ?,?{postal_code}?(\ ?,?{country})?)
                     )
                 )
                 """.format(

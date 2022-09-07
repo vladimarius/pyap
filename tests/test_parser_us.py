@@ -124,6 +124,8 @@ def test_thousand(input, expected):
         ("256 ", True),
         ("1256 ", True),
         ("32457 ", True),
+        ("155-B ", True),
+        ("25-C ", True),
         # negative assertions (words)
         ("ONE THousszz22and FIFTY and four onde", False),
         ("ONE one oNe and onE Three", False),
@@ -369,6 +371,13 @@ def test_po_box_positive(input, expected):
         ("8967 Market St.", True),
         ("3724 Oxford Blvd.", True),
         ("901 Rainier Ave S ", True),
+        ("One Parkway", True),
+        ("55 Highpoint", True),
+        ("1365 Broadway", True),
+        ("35-B Sunset Drive", True),
+        ("155 At I-552", True),
+        ("67 At Interstate 25", True),
+        ("128 Sunset Drive Bldg. 2.5 Suite 400", True),
     ],
 )
 def test_full_street_positive(input, expected):
@@ -402,7 +411,7 @@ def test_full_street_positive(input, expected):
         ("3201 MAIN RD NEWFIELD, NJ", True),
         ("4421 N DELSEA DR NEWFIELD, NJ", True),
         ("742 Forsythia Drive Newfield, NJ", True),
-        ("1450 E. Chestnut Avenue, Vineland NJ,", True),
+        ("1450 E. Chestnut Avenue, Vineland NJ", True),
         ("50 Harry S Truman Parkway Annapolis, MD 21401", True),
         ("420 Crompton Street Charlotte , North Carolina 28273", True),
         ("204 East 3rd Ave Cheyenne, WY 82001", True),
@@ -449,6 +458,7 @@ def test_full_street_positive(input, expected):
         ("1500 Westlake Avenue North Suite 108 Seattle, WA 98109", True),
         ("840 Garrison Brooks Suite 985, New Sarah, OH 38255", True),
         ("840 Garrison Brooks Suite 985 New Sarah, OH 38255", True),
+        ("128 Sunset Drive Bldg. 2.5 Suite 400, Austin Tx - 78755", True),
         # negative assertions
         ("85 STEEL REGULAR SHAFT - NE", False),
         ("3 STRUCTURE WITH PE", False),
@@ -507,6 +517,9 @@ def test_postal_code(input, expected):
         ("DC", True),
         ("PuErTO RIco", True),
         ("oregon", True),
+        ("Tx", True),
+        ("nY", True),
+        ("fl", True),
     ],
 )
 def test_region1(input, expected):
