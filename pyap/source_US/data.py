@@ -120,13 +120,23 @@ street_name = r"""(?P<street_name>
               """
 
 
+interstate_specs = [
+    r"Service\ Road",
+]
+
+
 interstate_street_type = r"""
             (?:
-                [Ii]\-\d{1,4}
+                [Ii]\-\ ?\d{{1,4}}
                 |
-                [Ii][Nn][Tt][Ee][Rr][Ss][Tt][Aa][Tt][Ee]\ *\d{1,4}
+                [Ii][Nn][Tt][Ee][Rr][Ss][Tt][Aa][Tt][Ee]\ *\d{{1,4}}
             )
-"""
+            (?:
+                [\ ?\,?]{{,2}}{optional_interstate_specs}
+            )?
+""".format(
+    optional_interstate_specs=str_list_to_upper_lower_regex(interstate_specs)
+)
 
 
 single_street_name_list = [
@@ -292,6 +302,7 @@ street_type_list = [
     "Cts",
     "Curv",
     "Curve",
+    r"Cut\ Off",
     "Cv",
     "Cvs",
     "Cyn",
@@ -813,6 +824,9 @@ occupancy = r"""
                             |
                             # Room
                             [Rr][Oo][Oo][Mm]\ |[Rr][Mm]\.?\ 
+                            |
+                            # Unit
+                            [Uu][Nn][Ii][Tt]\ 
                         )
                         (?:
                             [A-Za-z\#\&\-\d]{1,7}
@@ -828,7 +842,10 @@ occupancy = r"""
 
 po_box = r"""
             (?:
-                [Pp]\.?\ ?[Oo]\.?\ [Bb][Oo][Xx]\ \d+
+                (?:
+                    [Pp]\.?\ ?[Oo]\.?\ ?
+                )?
+                [Bb][Oo][Xx]\ \d+
             )
         """
 
