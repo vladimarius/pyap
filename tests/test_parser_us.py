@@ -206,6 +206,11 @@ def test_post_direction(input, expected):
         ("blvd", True),
         ("Estate", True),
         ("Manor", True),
+        ("Cut Off", True),
+        ("I-35", True),
+        ("Interstate 35", True),
+        ("I- 35", True),
+        ("I-35 Service Road", True),
         # negative assertions
         # TODO
     ],
@@ -284,7 +289,9 @@ def test_building(input, expected):
         ("Apt 1B ", True),
         ("Rm. 52 ", True),
         ("#2b ", True),
-        # positive assertions
+        ("Unit 101", True),
+        ("unit 101", True),
+        # negative assertions
         ("suite900 ", False),
         ("Suite#2", False),
         ("suite218 ", False),
@@ -303,6 +310,10 @@ def test_occupancy(input, expected):
         ("Po Box 53485", True),
         ("P.O. box 119", True),
         ("PO box 1070", True),
+        ("Box 101", True),
+        ("box 129", True),
+        ("P.O.BOX 167", True),
+        ("PoBox 129", True),
         # negative assertions
         ("po box108 ", False),
         ("PoBox53485 ", False),
@@ -378,6 +389,7 @@ def test_po_box_positive(input, expected):
         ("155 At I-552", True),
         ("67 At Interstate 25", True),
         ("128 Sunset Drive Bldg. 2.5 Suite 400", True),
+        ("55 Sunset Cut Off", True),
     ],
 )
 def test_full_street_positive(input, expected):
