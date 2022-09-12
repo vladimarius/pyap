@@ -113,7 +113,7 @@ In example below:
 "Hoover Boulevard": "Hoover" is a street name
 """
 street_name = r"""(?P<street_name>
-                  [a-zA-Z0-9\ \.]{3,31}  # Seems like the longest US street is
+                  [a-zA-Z0-9\ \.\-]{3,31}  # Seems like the longest US street is
                                          # 'Northeast Kentucky Industrial Parkway'
                                          # https://atkinsbookshelf.wordpress.com/tag/longest-street-name-in-us/
                  )
