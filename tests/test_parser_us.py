@@ -300,6 +300,8 @@ def test_building(input, expected):
         ("Pl #1200 ", True),
         ("#1900", True),
         ("#2500C", True),
+        ("# 1900", True),
+        ("# 2500C", True),
         # negative assertions
         ("suite900 ", False),
         ("Suite#2", False),
