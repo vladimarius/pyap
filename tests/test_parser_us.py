@@ -399,6 +399,9 @@ def test_po_box_positive(input, expected):
         ("67 At Interstate 25", True),
         ("128 Sunset Drive Bldg. 2.5 Suite 400", True),
         ("55 Sunset Cut Off", True),
+        ("1235 North Regal", True),
+        ("78 S. Criket", True),
+        ("78 SE Criket", True),
     ],
 )
 def test_full_street_positive(input, expected):
