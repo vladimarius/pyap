@@ -35,6 +35,7 @@ class Address:
     street_name: Union[str, None] = None
     street_number: Union[str, None] = None
     post_direction: Union[str, None] = None
+    phone_number: Union[str, None] = None
 
     def __post_init__(self):
         for s_field in self.__dataclass_fields__:

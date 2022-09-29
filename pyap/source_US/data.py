@@ -862,6 +862,15 @@ po_box = r"""
             )
         """
 
+phone_number = r"""
+            (?:
+                \*?
+                (?P<phone_number>
+                    \(?\d{3}\)?\-?\ ?\d{3}\-?\ ?\-?\d{4}
+                )
+            )
+            """
+
 full_street = r"""
     (?:
         (?P<full_street>
@@ -1070,6 +1079,7 @@ country = r"""
 full_address = r"""
                 (?P<full_address>
                     {full_street} {div}
+                    {phone_number}? {div}
                     {city} [\, -]{{1,2}}
                     {region1} {div}
                     (?:
@@ -1083,4 +1093,5 @@ full_address = r"""
     region1=region1,
     country=country,
     postal_code=postal_code,
+    phone_number=phone_number,
 )

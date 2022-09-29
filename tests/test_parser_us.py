@@ -504,6 +504,7 @@ def test_full_street_positive(input, expected):
         ("ONE FOR ANY DIRECT, INDIRECT, IN", False),
         ("2 TRACTOR HEAD Actros MP", False),
         ("00 Straight Fit Jean, USA", False),
+        ("23 Awesome Street *851-234-2567", False),
     ],
 )
 def test_full_address(input, expected):
@@ -565,3 +566,17 @@ def test_region1(input, expected):
 def test_country(input, expected):
     """test exact string match for country"""
     execute_matching_test(input, expected, data_us.country)
+
+
+@pytest.mark.parametrize(
+    "input,expected",
+    [
+        ("*851-245-1200", True),
+        ("851-245-1200", True),
+        ("851-245-1200", True),
+        ("8512451200", True),
+        ("(979) 778-0978", True),
+    ],
+)
+def test_phone_number(input, expected):
+    execute_matching_test(input, expected, data_us.phone_number)
