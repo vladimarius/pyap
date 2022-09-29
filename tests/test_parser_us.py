@@ -225,16 +225,16 @@ def test_street_type(input, expected):
     "input,expected",
     [
         # positive assertions
-        ("floor 3 ", True),
-        ("floor 11 ", True),
-        ("floor 15 ", True),
-        ("1st floor ", True),
-        ("2nd floor ", True),
-        ("15th floor ", True),
-        ("16th. floor ", True),
+        ("floor 3", True),
+        ("floor 11", True),
+        ("floor 15", True),
+        ("1st floor", True),
+        ("2nd floor", True),
+        ("15th floor", True),
+        ("16th. floor", True),
         # negative assertions
-        ("16th.floor ", False),
-        ("1stfloor ", False),
+        ("16th.floor", False),
+        ("1stfloor", False),
     ],
 )
 def test_floor(input, expected):
