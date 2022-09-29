@@ -827,6 +827,9 @@ occupancy = r"""
                             |
                             # Unit
                             [Uu][Nn][Ii][Tt]\ 
+                            |
+                            # Place
+                            [Pp][Ll][Aa][Cc][Ee]\ |[Pp][Ll]\.?\ 
                         )
                         (?:
                             [A-Za-z\#\&\-\d]{1,7}
