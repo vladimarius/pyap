@@ -325,6 +325,7 @@ def test_occupancy(input, expected):
         ("box 129", True),
         ("P.O.BOX 167", True),
         ("PoBox 129", True),
+        ("POST OFFICE BOX 129", True),
         # negative assertions
         ("po box108 ", False),
         ("PoBox53485 ", False),
@@ -485,6 +486,8 @@ def test_full_street_positive(input, expected):
         ("840 Garrison Brooks Suite 985, New Sarah, OH 38255", True),
         ("840 Garrison Brooks Suite 985 New Sarah, OH 38255", True),
         ("128 Sunset Drive Bldg. 2.5 Suite 400, Austin Tx - 78755", True),
+        ("23 Awesome Street *851-234-2567, Austin Tx 78755", True),
+        ("POST OFFICE BOX 123, Austin TX 78755", True),
         # negative assertions
         ("85 STEEL REGULAR SHAFT - NE", False),
         ("3 STRUCTURE WITH PE", False),
@@ -504,7 +507,6 @@ def test_full_street_positive(input, expected):
         ("ONE FOR ANY DIRECT, INDIRECT, IN", False),
         ("2 TRACTOR HEAD Actros MP", False),
         ("00 Straight Fit Jean, USA", False),
-        ("23 Awesome Street *851-234-2567", False),
     ],
 )
 def test_full_address(input, expected):
