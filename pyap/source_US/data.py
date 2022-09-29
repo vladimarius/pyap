@@ -138,6 +138,24 @@ interstate_street_type = r"""
     optional_interstate_specs=str_list_to_upper_lower_regex(interstate_specs)
 )
 
+post_direction_re = r"""
+                (?:
+                    (?:
+                        [Nn][Oo][Rr][Tt][Hh]|
+                        [Ss][Oo][Uu][Tt][Hh]|
+                        [Ee][Aa][Ss][Tt]|
+                        [Ww][Ee][Ss][Tt]
+                    )
+                    |
+                    (?:
+                        NW|NE|SW|SE
+                    )
+                    |
+                    (?:
+                        N\.?|S\.?|E\.?|W\.?
+                    )
+                )
+                """
 
 single_street_name_list = [
     "Broadway",
@@ -157,25 +175,13 @@ single_street_name = r"""
     interstate_street_type=interstate_street_type,
 )
 
-
 post_direction = r"""
                     (?P<post_direction>
-                        (?:
-                            [Nn][Oo][Rr][Tt][Hh]|
-                            [Ss][Oo][Uu][Tt][Hh]|
-                            [Ee][Aa][Ss][Tt]|
-                            [Ww][Ee][Ss][Tt]
-                        )
-                        |
-                        (?:
-                            NW|NE|SW|SE
-                        )
-                        |
-                        (?:
-                            N\.?|S\.?|E\.?|W\.?
-                        )
+                        {post_direction_re}
                     )
-                """
+                """.format(
+    post_direction_re=post_direction_re
+)
 
 # This list was taken from: https://pe.usps.com/text/pub28/28apc_002.htm
 # Broadway and Lp (abbreviation for Loop) were added to the list
@@ -868,6 +874,11 @@ full_street = r"""
                     )
                     |
                     (?:{single_street_name})
+                    |
+                    (?:
+                        {post_direction_re}\ 
+                        [A-z0-9\.\-]{{2,31}}
+                    )
                 )\,?\s?
                 (?:(?<!,\ ){post_direction}[,\s])?
                 {floor}?\,?\s?
@@ -884,6 +895,7 @@ full_street = r"""
     street_type=street_type,
     single_street_name=single_street_name,
     post_direction=post_direction,
+    post_direction_re=post_direction_re,
     floor=floor,
     building=building,
     occupancy=occupancy,
