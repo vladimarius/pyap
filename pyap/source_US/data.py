@@ -771,17 +771,26 @@ street_type = r"""
     interstate_street_type=interstate_street_type,
 )
 
+floor_indic = r"""
+            (?:
+                (?:[Ff][Ll][Oo][Oo][Rr]|[Ff][Ll]\.?)
+                (?:\ (?:[Hh][Oo][Rr][Ii][Zz][Oo][Nn][Tt][Aa][Ll]|[Hh][Oo][Rr][Ii][Zz]))?
+            )
+        """
+
 floor = r"""
             (?P<floor>
                 (?:
-                    \d+[A-Za-z]{0,2}\.?\ [Ff][Ll][Oo][Oo][Rr]
+                    \d+[A-Za-z]{{0,2}}\.?\ {floor_indic}
                 )
                 |
                 (?:
-                    [Ff][Ll][Oo][Oo][Rr]\ \d+[A-Za-z]{0,2}
+                    {floor_indic}\ \d+[A-Za-z]{{0,2}}
                 )
             )
-        """
+        """.format(
+    floor_indic=floor_indic
+)
 
 building = r"""
             (?P<building_id>

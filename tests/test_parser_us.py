@@ -232,6 +232,10 @@ def test_street_type(input, expected):
         ("2nd floor", True),
         ("15th floor", True),
         ("16th. floor", True),
+        ("2nd Fl", True),
+        ("16th FL.", True),
+        ("1st fl Horiz", True),
+        ("56th floor Horizontal", True),
         # negative assertions
         ("16th.floor", False),
         ("1stfloor", False),
