@@ -409,6 +409,7 @@ def test_po_box_positive(input, expected):
         ("1235 North Regal", True),
         ("78 S. Criket", True),
         ("78 SE Criket", True),
+        ("P.O. BOX 41256, One Velvet Drive", True),
     ],
 )
 def test_full_street_positive(input, expected):
