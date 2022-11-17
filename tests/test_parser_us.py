@@ -151,6 +151,8 @@ def test_street_number(input, expected):
         ("Ave 123 ", True),
         ("Northeast 5 ", True),
         ("Eudailey-Covington", True),
+        ("Smith’s mill road", True),
+        ("Smith's mill road", True),
         # negative assertions
         ("Northeast Kentucky Industrial Maple ", False),
         ("a", False),
