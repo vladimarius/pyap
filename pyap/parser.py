@@ -30,6 +30,7 @@ class AddressParser:
             package = "pyap" + ".source_" + self.country + ".data"
             data = importlib.import_module(package)
             self.rules = data.full_address
+            self.single_street_rules = data.full_street
 
         except ImportError:
             raise e.CountryDetectionMissing(
@@ -43,11 +44,17 @@ class AddressParser:
         """Returns a list of addresses found in text
         together with parsed address parts
         """
+        return self._parse(self.rules, text)
+
+    def parse_single_street(self, text: str) -> List[address.Address]:
+        return self._parse(self.single_street_rules, text)
+
+    def _parse(self, rules: str, text: str) -> List[address.Address]:
         results = []
         self.clean_text = self._normalize_string(text)
 
         # get addresses
-        address_matches = utils.finditer(self.rules, self.clean_text)
+        address_matches = utils.finditer(rules, self.clean_text)
         if address_matches:
             # append parsed address info
             results = list(map(self._parse_address, address_matches))
@@ -62,6 +69,11 @@ class AddressParser:
         cleaned_dict = self._combine_results(match_as_dict)
         cleaned_dict["match_start"] = match.start()
         cleaned_dict["match_end"] = match.end()
+
+        # if only parsing a single street the full address is the full street
+        if "full_address" not in cleaned_dict:
+            cleaned_dict["full_address"] = cleaned_dict["full_street"]
+
         # create object containing results
         return address.Address(**cleaned_dict)
 

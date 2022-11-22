@@ -22,3 +22,10 @@ def parse(some_text: str, country: Literal["US", "GB", "CA"]) -> List[address.Ad
     """
     ap = parser.AddressParser(country)
     return ap.parse(some_text)
+
+
+def parse_single_street(
+    some_text: str, country: Literal["US", "GB", "CA"]
+) -> List[address.Address]:
+    ap = parser.AddressParser(country)
+    return ap.parse_single_street(some_text)

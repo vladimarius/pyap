@@ -22,6 +22,13 @@ def test_api_parse():
     )
 
 
+def test_api_parse_single_street():
+    test_address = "255 SOUTH STREET"
+    addresses = ap.parse_single_street(test_address, country="US")
+    assert str(addresses[0].full_street) == "255 SOUTH STREET"
+    assert str(addresses[0].full_address) == "255 SOUTH STREET"
+
+
 def test_address_class_init():
     addr = address.Address(
         country_id="US",
