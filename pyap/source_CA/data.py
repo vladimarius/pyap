@@ -378,7 +378,7 @@ occupancy = r"""
             """
 
 po_box = r"""
-            (?P<postal_box>
+            (?:
                 # English - PO Box 123
                 (?:[Pp]\.?\ ?[Oo]\.?\ [Bb][Oo][Xx]\ \d+)
                 |
