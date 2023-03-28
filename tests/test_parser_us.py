@@ -334,6 +334,7 @@ def test_occupancy(input, expected):
         ("P.O.BOX 167", True),
         ("PoBox 129", True),
         ("POST OFFICE BOX 129", True),
+        ("P.O. BOX 99999", True),
         # negative assertions
         ("po box108 ", False),
         ("PoBox53485 ", False),
