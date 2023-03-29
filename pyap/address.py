@@ -34,6 +34,7 @@ class Address:
     postal_code: Union[str, None] = None
     street_name: Union[str, None] = None
     street_number: Union[str, None] = None
+    po_box: Union[str, None] = None
     post_direction: Union[str, None] = None
     phone_number: Union[str, None] = None
 

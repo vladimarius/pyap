@@ -97,3 +97,19 @@ def test_parse_address():
         addresses[0].full_address
         == "225 E. John Carpenter Freeway, Suite 1500 Irving, Texas 75062"
     )
+
+
+def test_parse_po_box():
+    ap = parser.AddressParser(country="US")
+
+    address = ap.parse_single_street(
+        "ELECTRIC WIRING SYSTEMS INC, 1111 ASHLEY STREET, P.O. BOX 99999, "
+        "BOWLING GREEN, KY 444444-9999"
+    )[0]
+    assert address.po_box == "P.O. BOX 99999"
+
+    address = ap.parse_single_street("P.O. BOX 99999, One Velvet Drive")[0]
+    assert address.po_box == "P.O. BOX 99999"
+
+    address = ap.parse_single_street("P.O. BOX 99999")[0]
+    assert address.po_box == "P.O. BOX 99999"
