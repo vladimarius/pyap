@@ -335,6 +335,8 @@ def test_occupancy(input, expected):
         ("PoBox 129", True),
         ("POST OFFICE BOX 129", True),
         ("P.O. BOX 99999", True),
+        ("PMB 29700", True),
+        ("pmb #29700", True),
         # negative assertions
         ("po box108 ", False),
         ("PoBox53485 ", False),
@@ -415,6 +417,7 @@ def test_po_box_positive(input, expected):
         ("78 S. Criket", True),
         ("78 SE Criket", True),
         ("P.O. BOX 41256, One Velvet Drive", True),
+        ("666 Hell ST PMB 29700", True),
     ],
 )
 def test_full_street_positive(input, expected):
