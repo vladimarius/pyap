@@ -501,6 +501,7 @@ def test_full_street_positive(input, expected):
         ("128 Sunset Drive Bldg. 2.5 Suite 400, Austin Tx - 78755", True),
         ("23 Awesome Street *851-234-2567, Austin Tx 78755", True),
         ("POST OFFICE BOX 123, Austin TX 78755", True),
+        ("1 MEGA CENTER, MegaCity, MICH.49423-9576", True),
         # negative assertions
         ("85 STEEL REGULAR SHAFT - NE", False),
         ("3 STRUCTURE WITH PE", False),
@@ -562,6 +563,7 @@ def test_postal_code(input, expected):
         ("Tx", True),
         ("nY", True),
         ("fl", True),
+        ("MICH", True),
     ],
 )
 def test_region1(input, expected):
