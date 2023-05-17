@@ -957,7 +957,7 @@ def states_abbrvs_regex() -> str:
         "ME",
         "MD",
         "MA",
-        "MI",
+        "MI(?:CH)?",
         "MN",
         "MS",
         "MO",
@@ -995,7 +995,7 @@ def states_abbrvs_regex() -> str:
     ]
 
     def to_abbr_with_optional_dots(abbr: str) -> str:
-        return "".join(c + r"\.?" for c in abbr)
+        return "".join((c + r"\.?") if c in string.ascii_uppercase else c for c in abbr)
 
     return str_list_to_upper_lower_regex(
         [to_abbr_with_optional_dots(abbr) for abbr in state_abbrs]

@@ -35,8 +35,7 @@ jobs:
 
     - name: Install dependencies
       run: |2
-
-        python -m pip install poetry==1.1.8
+        curl -sSL https://install.python-poetry.org | POETRY_VERSION=1.4.2 python3 -
         poetry install
     - name: QA
       run: poetry run task ${{ matrix['task'] }}
