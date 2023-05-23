@@ -895,7 +895,7 @@ full_street = r"""
     (?:
         (?P<full_street>
             (?:
-                (?P<po_box_b>{po_box})?\,?\s?
+                (?P<po_box_b>{po_box}\,?\s?)?
                 {street_number}
                 (?:
                     (?:
