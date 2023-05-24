@@ -252,6 +252,7 @@ def test_floor(input, expected):
     "input,expected",
     [
         # positive assertions
+        ("Building II", True),
         ("bldg m ", True),
         ("Building F ", True),
         ("bldg 2 ", True),
@@ -431,6 +432,7 @@ def test_full_street_positive(input, expected):
     "input,expected",
     [
         # positive assertions
+        ("12401 Research Blvd, Building II, Austin TX 78759", True),
         ("0 OLD MILL RD, Maynard, MA 01754", True),
         ("103 Morgan Lane, Suite 102 Plainsboro, NJ 08536", True),
         ("3409 16th St Metairie, LA 70002", True),
