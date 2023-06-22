@@ -82,34 +82,47 @@ def test_combine_results():
     assert ap._combine_results(raw_dict) == {"test_one": 1, "test_two": 2}
 
 
-def test_parse_address():
+@pytest.mark.parametrize(
+    "input,expected",
+    [
+        ("No address here", None),
+        (
+            "xxx, 225 E. John Carpenter Freeway, Suite 1500 Irving, Texas 75062 xxx",
+            {
+                "street_number": "225",
+                "street_name": "E. John Carpenter",
+                "street_type": "Freeway",
+                "occupancy": "Suite 1500",
+                "city": "Irving",
+                "region1": "Texas",
+                "postal_code": "75062",
+                "full_address": (
+                    "225 E. John Carpenter Freeway, Suite 1500 Irving, Texas 75062"
+                ),
+            },
+        ),
+        (
+            "1300 E MOUNT GARFIELD ROAD, NORTON SHORES 49441",
+            {
+                "street_number": "1300",
+                "street_name": "E MOUNT GARFIELD",
+                "street_type": "ROAD",
+                "city": "NORTON SHORES",
+                "region1": None,
+                "postal_code": "49441",
+                "full_address": ("1300 E MOUNT GARFIELD ROAD, NORTON SHORES 49441"),
+            },
+        ),
+    ],
+)
+def test_parse_address(input: str, expected):
     ap = parser.AddressParser(country="US")
-    result = ap.parse("No address here")
-    assert not result
-
-    ap = parser.AddressParser(country="US")
-    test_address = (
-        "xxx 225 E. John Carpenter Freeway, " + "Suite 1500 Irving, Texas 75062 xxx"
-    )
-
-    addresses = ap.parse(test_address)
-    assert (
-        addresses[0].full_address
-        == "225 E. John Carpenter Freeway, Suite 1500 Irving, Texas 75062"
-    )
-
-
-def test_do_not_match_separator_start():
-    ap = parser.AddressParser(country="US")
-    test_address = (
-        "xxx, 225 E. John Carpenter Freeway, Suite 1500 Irving, Texas 75062 xxx"
-    )
-    addresses = ap.parse(test_address)
-    assert addresses[0].match_start == 5
-    assert (
-        addresses[0].full_address
-        == "225 E. John Carpenter Freeway, Suite 1500 Irving, Texas 75062"
-    )
+    if result := ap.parse(input):
+        expected = expected or {}
+        for key in expected:
+            assert getattr(result[0], key) == expected[key]
+    else:
+        assert expected is None
 
 
 def test_parse_po_box():

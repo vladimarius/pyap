@@ -96,7 +96,7 @@ street_number = r"""(?P<street_number>
                         ){from_to}
                         |
                         (?:\d{from_to}
-                            (?:\ ?\-?\ ?(?:\d{from_to}|[A-Z]))?\ 
+                            (?:\ ?\-?\ ?(?:\d{from_to}|(?:\-\ ?[A-Z])))?\ 
                         )
                     )
                 """.format(
@@ -1102,7 +1102,7 @@ full_address = r"""
                     {full_street} {div}
                     {phone_number}? {div}
                     {city} [\, -]{{1,2}}
-                    {region1} {div}
+                    (?:{region1} {div})?
                     (?:
                         (?:\ ?,?{postal_code}?(\ ?,?{country})?)
                     )
