@@ -113,6 +113,18 @@ def test_combine_results():
                 "full_address": ("1300 E MOUNT GARFIELD ROAD, NORTON SHORES 49441"),
             },
         ),
+        (
+            "7601 Penn Avenue South, Richfield MN 55423",
+            {
+                "street_number": "7601",
+                "street_name": "Penn",
+                "street_type": "Avenue",
+                "post_direction": "South",
+                "city": "Richfield",
+                "region1": "MN",
+                "postal_code": "55423",
+            },
+        ),
     ],
 )
 def test_parse_address(input: str, expected):

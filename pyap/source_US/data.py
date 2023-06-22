@@ -1080,7 +1080,7 @@ region1 = r"""
 # TODO: doesn't catch cities containing French characters
 city = r"""
         (?P<city>
-            [A-Za-z]{1}[a-zA-Z\ \-\'\.]{2,20}
+            [A-Za-z]{1}[a-zA-Z\ \-\'\.]{2,20}?
         )
         """
 
@@ -1101,13 +1101,13 @@ full_address = r"""
                 (?P<full_address>
                     {full_street} {div}
                     {phone_number}? {div}
-                    {city} [\, -]{{1,2}}
+                    {city}
                     (?:
-                        {region1} {div}
+                        [\, -]{{1,2}} {region1} (?![A-Za-z])
                         | 
-                        {postal_code} {div}
+                        [\, -]{{0,3}} {postal_code}
                     ){{1,2}}
-                    {country}?
+                    {div} {country}?
                 )
                 """.format(
     full_street=full_street,
