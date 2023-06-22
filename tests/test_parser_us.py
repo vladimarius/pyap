@@ -130,6 +130,7 @@ def test_thousand(input, expected):
         ("ONE THousszz22and FIFTY and four onde", False),
         ("ONE one oNe and onE Three", False),
         # negative assertions (numbers)
+        ("1000 E ", False),
         ("536233", False),
         ("111111", False),
         ("1111ss11", False),
@@ -153,6 +154,7 @@ def test_street_number(input, expected):
         ("Eudailey-Covington", True),
         ("Smith’s mill road", True),
         ("Smith's mill road", True),
+        ("E MOUNT GARFIELD ROAD", True),
         # negative assertions
         ("Northeast Kentucky Industrial Maple ", False),
         ("a", False),
@@ -506,6 +508,7 @@ def test_full_street_positive(input, expected):
         ("23 Awesome Street *851-234-2567, Austin Tx 78755", True),
         ("POST OFFICE BOX 123, Austin TX 78755", True),
         ("1 MEGA CENTER, MegaCity, MICH.49423-9576", True),
+        ("1300 E MOUNT GARFIELD ROAD, NORTON SHORES 49441", True),
         # negative assertions
         ("85 STEEL REGULAR SHAFT - NE", False),
         ("3 STRUCTURE WITH PE", False),
@@ -525,6 +528,7 @@ def test_full_street_positive(input, expected):
         ("ONE FOR ANY DIRECT, INDIRECT, IN", False),
         ("2 TRACTOR HEAD Actros MP", False),
         ("00 Straight Fit Jean, USA", False),
+        ("123 Curvy Way, Littleville, USA", False),
     ],
 )
 def test_full_address(input, expected):
