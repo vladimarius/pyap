@@ -1102,10 +1102,12 @@ full_address = r"""
                     {full_street} {div}
                     {phone_number}? {div}
                     {city} [\, -]{{1,2}}
-                    (?:{region1} {div})?
                     (?:
-                        (?:\ ?,?{postal_code}?(\ ?,?{country})?)
-                    )
+                        {region1} {div}
+                        | 
+                        {postal_code} {div}
+                    ){{1,2}}
+                    {country}?
                 )
                 """.format(
     full_street=full_street,

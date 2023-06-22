@@ -528,6 +528,7 @@ def test_full_street_positive(input, expected):
         ("ONE FOR ANY DIRECT, INDIRECT, IN", False),
         ("2 TRACTOR HEAD Actros MP", False),
         ("00 Straight Fit Jean, USA", False),
+        ("123 Curvy Way, Littleville, USA", False),
     ],
 )
 def test_full_address(input, expected):
