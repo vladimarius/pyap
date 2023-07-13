@@ -449,6 +449,7 @@ def test_full_street_positive(input, expected):
     "input,expected",
     [
         # positive assertions
+        ("235 PEACHTREE ST NE 900, ATLANTA, GA 30303", True),
         ("600 HIGHWAY 32 EAST, WATER VALLEY, MS 38965", True),
         ("12401 Research Blvd, Building II, Austin TX 78759", True),
         ("0 OLD MILL RD, Maynard, MA 01754", True),
