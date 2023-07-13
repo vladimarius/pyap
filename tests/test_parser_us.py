@@ -170,6 +170,20 @@ def test_street_name(input, expected):
     "input,expected",
     [
         # positive assertions
+        ("Highway 32", True),
+        ("Parkway", True)
+        # negative assertions
+    ],
+)
+def test_single_street_name(input, expected):
+    """tests positive string match for a street name"""
+    execute_matching_test(input, expected, data_us.single_street_name)
+
+
+@pytest.mark.parametrize(
+    "input,expected",
+    [
+        # positive assertions
         ("N.", True),
         ("N", True),
         ("S", True),
@@ -356,6 +370,7 @@ def test_po_box_positive(input, expected):
     "input,expected",
     [
         # positive assertions
+        ("600 HIGHWAY 32 EAST,", True),
         ("9652 Loiret Boulevard", True),
         ("101 MacIntosh Boulevard", True),
         ("1 West Hegeler Lane", True),
@@ -434,6 +449,7 @@ def test_full_street_positive(input, expected):
     "input,expected",
     [
         # positive assertions
+        ("600 HIGHWAY 32 EAST, WATER VALLEY, MS 38965", True),
         ("12401 Research Blvd, Building II, Austin TX 78759", True),
         ("0 OLD MILL RD, Maynard, MA 01754", True),
         ("103 Morgan Lane, Suite 102 Plainsboro, NJ 08536", True),

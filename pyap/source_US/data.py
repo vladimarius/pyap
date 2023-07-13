@@ -138,6 +138,8 @@ interstate_street_type = r"""
     optional_interstate_specs=str_list_to_upper_lower_regex(interstate_specs)
 )
 
+highway_re = r"""(?:[Hh][Ii][Gg][Hh][Ww][Aa][Yy]\s+\d{1,4})"""
+
 post_direction_re = r"""
                 (?:
                     (?:
@@ -165,14 +167,15 @@ single_street_name_list = [
 
 
 # Used to handle edge cases where streets don't have a street type:
-# eg. `55 HIGHPOINT
+# eg. `55 HIGHPOINT`, `600 HIGHWAY 32`
 single_street_name = r"""
     (?:
-        {single_street_name_regex}|[Aa][Tt]\ {interstate_street_type}
+        {single_street_name_regex}|[Aa][Tt]\ {interstate_street_type}|{highway_re}
     )
 """.format(
     single_street_name_regex=str_list_to_upper_lower_regex(single_street_name_list),
     interstate_street_type=interstate_street_type,
+    highway_re=highway_re,
 )
 
 post_direction = r"""
