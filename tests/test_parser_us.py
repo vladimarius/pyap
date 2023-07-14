@@ -370,6 +370,7 @@ def test_po_box_positive(input, expected):
     "input,expected",
     [
         # positive assertions
+        ("140 EAST 45TH, ST, 28TH FLOOR", True),
         ("600 HIGHWAY 32 EAST,", True),
         ("9652 Loiret Boulevard", True),
         ("101 MacIntosh Boulevard", True),
@@ -449,6 +450,7 @@ def test_full_street_positive(input, expected):
     "input,expected",
     [
         # positive assertions
+        ("140 EAST 45TH, ST, 28TH FLOOR, NY, 10017 NY", True),
         ("235 PEACHTREE ST NE 900, ATLANTA, GA 30303", True),
         ("600 HIGHWAY 32 EAST, WATER VALLEY, MS 38965", True),
         ("12401 Research Blvd, Building II, Austin TX 78759", True),

@@ -903,7 +903,7 @@ full_street = r"""
                 (?:
                     (?:
                         {street_name}?
-                        (?:[\ \,]{street_type})
+                        (?:[\ \,]{{1,2}}{street_type})
                     )
                     |
                     (?:{single_street_name})
@@ -1083,7 +1083,7 @@ region1 = r"""
 # TODO: doesn't catch cities containing French characters
 city = r"""
         (?P<city>
-            [A-Za-z]{1}[a-zA-Z\ \-\'\.]{2,20}?
+            [A-Za-z]{1}[a-zA-Z\ \-\'\.]{2,20}?|N\.?Y\.?
         )
         """
 
