@@ -452,6 +452,7 @@ def test_full_street_positive(input, expected):
         # positive assertions
         ("123 Very Nice Street, Ulm, AR 12345", True),
         ("16444 N 91ST ST BLDG H, SCOTTSDALE, AZ 85260", True),
+        ("256 W 36TH ST FLR 4, NEW YORK, NY 10018", True),
         ("140 EAST 45TH, ST, 28TH FLOOR, NY, 10017 NY", True),
         ("235 PEACHTREE ST NE 900, ATLANTA, GA 30303", True),
         ("600 HIGHWAY 32 EAST, WATER VALLEY, MS 38965", True),

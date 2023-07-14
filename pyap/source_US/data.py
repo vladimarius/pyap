@@ -776,7 +776,7 @@ street_type = r"""
 
 floor_indic = r"""
             (?:
-                (?:[Ff][Ll][Oo][Oo][Rr]|[Ff][Ll]\.?)
+                (?:[Ff][Ll][Oo][Oo][Rr]|[Ff][Ll][Rr]?\.?)
                 (?:\ (?:[Hh][Oo][Rr][Ii][Zz][Oo][Nn][Tt][Aa][Ll]|[Hh][Oo][Rr][Ii][Zz]))?
             )
         """
