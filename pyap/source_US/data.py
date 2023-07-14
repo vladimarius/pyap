@@ -1081,9 +1081,18 @@ region1 = r"""
 )
 
 # TODO: doesn't catch cities containing French characters
+# We require short city names to contain a vowel
 city = r"""
         (?P<city>
-            [A-Za-z]{1}[a-zA-Z\ \-\'\.]{2,20}?|N\.?Y\.?
+            [A-Za-z]{1}[a-zA-Z\ \-\'\.]{3,20}?
+            |
+            N\.?Y\.?
+            |
+            [AaEeIiUuOo][A-Za-z]{2}
+            |
+            [A-Za-z][AaEeIiUuOo][A-Za-z]
+            |
+            [A-Za-z]{2}[AaEeIiUuOoYy]
         )
         """
 
