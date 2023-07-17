@@ -140,6 +140,8 @@ interstate_street_type = r"""
 
 highway_re = r"""(?:[Hh][Ii][Gg][Hh][Ww][Aa][Yy]\s+\d{1,4})"""
 
+avenue_re = r"""(?:[NSWE]\ [Aa][Vv][Ee](?:\.|[Nn][Uu][Ee])?\ \d{1,2})"""
+
 post_direction_re = r"""
                 (?:
                     (?:
@@ -170,12 +172,19 @@ single_street_name_list = [
 # eg. `55 HIGHPOINT`, `600 HIGHWAY 32`
 single_street_name = r"""
     (?:
-        {single_street_name_regex}|[Aa][Tt]\ {interstate_street_type}|{highway_re}
+        {single_street_name_regex}
+        |
+        [Aa][Tt]\ {interstate_street_type}
+        |
+        {highway_re}
+        |
+        {avenue_re}
     )
 """.format(
     single_street_name_regex=str_list_to_upper_lower_regex(single_street_name_list),
     interstate_street_type=interstate_street_type,
     highway_re=highway_re,
+    avenue_re=avenue_re,
 )
 
 post_direction = r"""
