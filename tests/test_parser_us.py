@@ -370,6 +370,7 @@ def test_po_box_positive(input, expected):
     "input,expected",
     [
         # positive assertions
+        ("140 EAST 45TH, ST, 28TH FLOOR", True),
         ("600 HIGHWAY 32 EAST,", True),
         ("9652 Loiret Boulevard", True),
         ("101 MacIntosh Boulevard", True),
@@ -449,6 +450,10 @@ def test_full_street_positive(input, expected):
     "input,expected",
     [
         # positive assertions
+        ("123 Very Nice Street, Ulm, AR 12345", True),
+        ("16444 N 91ST ST BLDG H, SCOTTSDALE, AZ 85260", True),
+        ("256 W 36TH ST FLR 4, NEW YORK, NY 10018", True),
+        ("140 EAST 45TH, ST, 28TH FLOOR, NY, 10017 NY", True),
         ("235 PEACHTREE ST NE 900, ATLANTA, GA 30303", True),
         ("600 HIGHWAY 32 EAST, WATER VALLEY, MS 38965", True),
         ("12401 Research Blvd, Building II, Austin TX 78759", True),
@@ -527,6 +532,7 @@ def test_full_street_positive(input, expected):
         ("1 MEGA CENTER, MegaCity, MICH.49423-9576", True),
         ("1300 E MOUNT GARFIELD ROAD, NORTON SHORES 49441", True),
         # negative assertions
+        ("ONE HEALING CENTER LLC, 16444", False),
         ("85 STEEL REGULAR SHAFT - NE", False),
         ("3 STRUCTURE WITH PE", False),
         ("2013 Courtesy of DONNA LUPI, PR", False),

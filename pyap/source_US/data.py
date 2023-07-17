@@ -776,7 +776,7 @@ street_type = r"""
 
 floor_indic = r"""
             (?:
-                (?:[Ff][Ll][Oo][Oo][Rr]|[Ff][Ll]\.?)
+                (?:[Ff][Ll][Oo][Oo][Rr]|[Ff][Ll][Rr]?\.?)
                 (?:\ (?:[Hh][Oo][Rr][Ii][Zz][Oo][Nn][Tt][Aa][Ll]|[Hh][Oo][Rr][Ii][Zz]))?
             )
         """
@@ -903,7 +903,7 @@ full_street = r"""
                 (?:
                     (?:
                         {street_name}?
-                        (?:[\ \,]{street_type})
+                        (?:[\ \,]{{1,2}}{street_type})
                     )
                     |
                     (?:{single_street_name})
@@ -1081,9 +1081,18 @@ region1 = r"""
 )
 
 # TODO: doesn't catch cities containing French characters
+# We require short city names to contain a vowel
 city = r"""
         (?P<city>
-            [A-Za-z]{1}[a-zA-Z\ \-\'\.]{2,20}?
+            [A-Za-z]{1}[a-zA-Z\ \-\'\.]{3,20}?
+            |
+            N\.?Y\.?
+            |
+            [AaEeIiUuOo][A-Za-z]{2}
+            |
+            [A-Za-z][AaEeIiUuOo][A-Za-z]
+            |
+            [A-Za-z]{2}[AaEeIiUuOoYy]
         )
         """
 
