@@ -751,7 +751,7 @@ def street_type_list_to_regex(street_type_list):
     # Use \b to check that there are word boundaries before and after the street type
     # Optionally match zero to two of " ", ",", or "." after the street name
     street_types = street_types.replace("|", r"\b{div}|\b")
-    street_types = r"\b" + street_types + r"\b{div}"
+    street_types = r"\b" + r"(?:" + street_types + r")" + r"\b\.?(?:[\,\ ]|$)"
     return street_types.format(
         div=r"[\.\ ,]{0,2}",
     )
@@ -835,7 +835,7 @@ occupancy = r"""
                     (?:
                         (?:
                             # Suite
-                            [Ss][Uu][Ii][Tt][Ee]\ |[Ss][Tt][Ee]\.?\ 
+                            [Ss][Uu][Ii][Tt][Ee]\ |[Ss][Tt][Ee]?[\.\ ]{1,2}
                             |
                             # Apartment
                             [Aa][Pp][Tt]\.?\ |[Aa][Pp][Aa][Rr][Tt][Mm][Ee][Nn][Tt]\ 

@@ -294,6 +294,7 @@ def test_building(input, expected):
     "input,expected",
     [
         # positive assertions
+        ("ST.8-520", True),
         ("suite 900 ", True),
         ("Suite #2 ", True),
         ("suite #218 ", True),
@@ -370,6 +371,7 @@ def test_po_box_positive(input, expected):
     "input,expected",
     [
         # positive assertions
+        ("3525 PIEDMONT RD. NE ST.8-520", True),
         ("140 EAST 45TH, ST, 28TH FLOOR", True),
         ("600 HIGHWAY 32 EAST,", True),
         ("9652 Loiret Boulevard", True),
