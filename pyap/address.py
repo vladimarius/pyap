@@ -32,6 +32,7 @@ class Address:
     street_type: Union[str, None] = None
     building_id: Union[str, None] = None
     postal_code: Union[str, None] = None
+    single_street_name: Union[str, None] = None
     street_name: Union[str, None] = None
     street_number: Union[str, None] = None
     po_box: Union[str, None] = None
