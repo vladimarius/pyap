@@ -159,6 +159,13 @@ post_direction_re = r"""
                 )
                 """
 
+numbered_avenue_re = r"""
+                (?:{post_direction_re}\ [Aa][Vv][Ee](?:\.|[Nn][Uu][Ee])?\ \d{{1,2}})
+""".format(
+    post_direction_re=post_direction_re
+)
+
+
 single_street_name_list = [
     "Broadway",
     "Highpoint",
@@ -169,13 +176,20 @@ single_street_name_list = [
 # Used to handle edge cases where streets don't have a street type:
 # eg. `55 HIGHPOINT`, `600 HIGHWAY 32`
 single_street_name = r"""
-    (?:
-        {single_street_name_regex}|[Aa][Tt]\ {interstate_street_type}|{highway_re}
+    (?P<single_street_name>
+        {single_street_name_regex}
+        |
+        [Aa][Tt]\ {interstate_street_type}
+        |
+        {highway_re}
+        |
+        {numbered_avenue_re}
     )
 """.format(
     single_street_name_regex=str_list_to_upper_lower_regex(single_street_name_list),
     interstate_street_type=interstate_street_type,
     highway_re=highway_re,
+    numbered_avenue_re=numbered_avenue_re,
 )
 
 post_direction = r"""
@@ -1098,7 +1112,7 @@ city = r"""
 
 postal_code = r"""
             (?P<postal_code>
-                (?:\d{5}(?:\-\d{4})?)
+                (?:\d{5}(?:\-\d{4})?(?!\d))
             )
             """
 

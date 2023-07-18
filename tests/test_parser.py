@@ -125,6 +125,17 @@ def test_combine_results():
                 "postal_code": "55423",
             },
         ),
+        (
+            "STAFFING LLC, 242 N AVENUE 25 SUITE 300, LOS ANGELES, CA 900031, Period ",
+            {
+                "street_number": "242",
+                "single_street_name": "N AVENUE 25",
+                "occupancy": "SUITE 300",
+                "city": "LOS ANGELES",
+                "region1": "CA",
+                "postal_code": None,
+            },
+        ),
     ],
 )
 def test_parse_address(input: str, expected):
