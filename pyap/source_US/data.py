@@ -112,13 +112,15 @@ Regexp for matching street name.
 In example below:
 "Hoover Boulevard": "Hoover" is a street name
 """
-street_name = r"""(?P<street_name>
-                  [a-zA-Z0-9\ \.\-\'\’]{3,31}  # Seems like the longest US street is
-                                         # 'Northeast Kentucky Industrial Parkway'
-                                         # https://atkinsbookshelf.wordpress.com/tag/longest-street-name-in-us/
-                 )
-              """
-
+# Seems like the longest US street is
+# 'Northeast Kentucky Industrial Parkway'
+# https://atkinsbookshelf.wordpress.com/tag/longest-street-name-in-us/
+# On the other hand, there are streets like "Ed Drive".
+street_name = r"""
+            (?P<street_name>
+                [a-zA-Z0-9\ \.\-\'\’]{3,31}|[a-zA-Z]{2}(?=\ [a-zA-Z])
+            )
+"""
 
 interstate_specs = [
     r"Service\ Road",
@@ -849,7 +851,7 @@ occupancy = r"""
                     (?:
                         (?:
                             # Suite
-                            [Ss][Uu][Ii][Tt][Ee]\ |[Ss][Tt][Ee]?[\.\ ]{1,2}
+                            [Ss][Uu][Ii][Tt][Ee]\,?\ |[Ss][Tt][Ee]?[\.\ ]{1,2}
                             |
                             # Apartment
                             [Aa][Pp][Tt]\.?\ |[Aa][Pp][Aa][Rr][Tt][Mm][Ee][Nn][Tt]\ 
@@ -927,7 +929,7 @@ full_street = r"""
                         [A-z0-9\.\-]{{2,31}}
                     )
                 )\,?\s?
-                (?:(?<!,\ ){post_direction}[,\s])?
+                (?:{post_direction}[,\s])?
                 {floor}?\,?\s?
                 {building}?\,?\s?
                 {occupancy}?\,?\s?
