@@ -112,15 +112,21 @@ Regexp for matching street name.
 In example below:
 "Hoover Boulevard": "Hoover" is a street name
 """
-# Seems like the longest US street is
+# Seems like the longest street names in the US are
+# 'Jean Baptiste Point du Sable Lake Shore Drive' and
 # 'Northeast Kentucky Industrial Parkway'
 # https://atkinsbookshelf.wordpress.com/tag/longest-street-name-in-us/
 # On the other hand, there are streets like "Ed Drive".
-street_name = r"""
-            (?P<street_name>
-                [a-zA-Z0-9\ \.\-\'\’]{3,31}|[a-zA-Z]{2}(?=\ [a-zA-Z])
+street_name_multi_word_re = r"""
+            (?:
+                [a-zA-Z0-9\ \.\-\'\’]{3,41}|[a-zA-Z]{2}(?=\ [a-zA-Z])
             )
 """
+
+# This pattern should be quite conservative because it will be followed by
+# optional matchers - we want to avoid matching too much with this.
+street_name_one_word_re = r"(?:[A-Z][A-Za-z]{2,15})"
+
 
 interstate_specs = [
     r"Service\ Road",
@@ -759,6 +765,8 @@ street_type_list = [
     "Xrds",
 ]
 
+street_type_leading_list = ["Camino", "El\ Camino"]
+
 
 def street_type_list_to_regex(street_type_list):
     """Converts a list of street types into a regex"""
@@ -773,21 +781,37 @@ def street_type_list_to_regex(street_type_list):
     )
 
 
-# Regexp for matching street type
-street_type = r"""
+street_types_re = street_type_list_to_regex(street_type_list)
+
+street_types_with_interstate_re = rf"{street_types_re}|{interstate_street_type}"
+
+street_types_leading_re = street_type_list_to_regex(street_type_leading_list)
+
+street_type_extended = r"""
             (?:
-                (?P<street_type>
-                    {street_types}|{interstate_street_type}
-                )
+                {street_type_a}
                 (?P<route_id>
                     [\(\ \,]{route_symbols}
                     [Rr][Oo][Uu][Tt][Ee]\ [A-Za-z0-9]+[\)\ \,]{route_symbols}
                 )?
             )
 """.format(
+    street_type_a=rf"(?P<street_type_a>{street_types_with_interstate_re})",
     route_symbols="{0,3}",
-    street_types=street_type_list_to_regex(street_type_list),
-    interstate_street_type=interstate_street_type,
+)
+
+
+typed_street_name = r"""
+            (?:      
+                (?:{street_name_a}[\ \,]{{1,2}}{street_type_a})
+                |
+                (?:{street_type_b}{street_name_b})
+            )
+""".format(
+    street_name_a=rf"(?P<street_name_a>{street_name_multi_word_re})",
+    street_type_a=street_type_extended,
+    street_type_b=rf"(?P<street_type_b>{street_types_leading_re})",
+    street_name_b=rf"(?P<street_name_b>{street_name_one_word_re})",
 )
 
 floor_indic = r"""
@@ -917,10 +941,7 @@ full_street = r"""
                 (?P<po_box_b>{po_box}\,?\s?)?
                 {street_number}
                 (?:
-                    (?:
-                        {street_name}?
-                        (?:[\ \,]{{1,2}}{street_type})
-                    )
+                    (?:{typed_street_name})
                     |
                     (?:{single_street_name})
                     |
@@ -940,8 +961,7 @@ full_street = r"""
         )
     )""".format(
     street_number=street_number,
-    street_name=street_name,
-    street_type=street_type,
+    typed_street_name=typed_street_name,
     single_street_name=single_street_name,
     post_direction=post_direction,
     post_direction_re=post_direction_re,

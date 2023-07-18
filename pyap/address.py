@@ -44,6 +44,8 @@ class Address:
             field = getattr(self, s_field)
             if isinstance(field, str):
                 setattr(self, s_field, field.strip(" ,;:"))
+            elif isinstance(field, list) and field and isinstance(field[0], str):
+                setattr(self, s_field, field[0].strip(" ,;:"))
 
     def __repr__(self) -> str:
         # Address object is represented as textual address
