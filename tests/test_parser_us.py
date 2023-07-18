@@ -371,6 +371,7 @@ def test_po_box_positive(input, expected):
     "input,expected",
     [
         # positive assertions
+        ("3821 ED DR", True),
         ("3525 PIEDMONT RD. NE ST.8-520", True),
         ("140 EAST 45TH, ST, 28TH FLOOR", True),
         ("600 HIGHWAY 32 EAST,", True),
@@ -452,6 +453,9 @@ def test_full_street_positive(input, expected):
     "input,expected",
     [
         # positive assertions
+        ("3821 ED DR, RALEIGH, NC 27612", True),
+        ("213 WEST 35TH STREET SUITE, 400, NEW YORK, NY", True),
+        ("326 33RD AVE., EAST, SEATTLE, WA 98112", True),
         ("242 N AVENUE 25 SUITE 300, LOS ANGELES, CA 90031", True),
         ("123 Very Nice Street, Ulm, AR 12345", True),
         ("16444 N 91ST ST BLDG H, SCOTTSDALE, AZ 85260", True),
