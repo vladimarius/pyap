@@ -136,6 +136,18 @@ def test_combine_results():
                 "postal_code": None,
             },
         ),
+        (
+            "2633 Camino Ramon Ste. 400 San Ramon, CA 94583-2176",
+            {
+                "street_number": "2633",
+                "street_type": "Camino",
+                "street_name": "Ramon",
+                "occupancy": "Ste. 400",
+                "city": "San Ramon",
+                "region1": "CA",
+                "postal_code": "94583-2176",
+            },
+        ),
     ],
 )
 def test_parse_address(input: str, expected):

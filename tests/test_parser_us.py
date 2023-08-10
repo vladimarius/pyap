@@ -146,6 +146,7 @@ def test_street_number(input, expected):
     "input,expected",
     [
         # positive assertions
+        ("Jean Baptiste Point du Sable Lake Shore", True),
         ("Northeast Kentucky Industrial ", True),
         ("One ", True),
         ("First ", True),
@@ -156,14 +157,14 @@ def test_street_number(input, expected):
         ("Smith's mill road", True),
         ("E MOUNT GARFIELD ROAD", True),
         # negative assertions
-        ("Northeast Kentucky Industrial Maple ", False),
+        ("Jean Baptiste Point du Sable Lake Shore Alternative", False),
         ("a", False),
         ("ab", False),
     ],
 )
 def test_street_name(input, expected):
     """tests positive string match for a street name"""
-    execute_matching_test(input, expected, data_us.street_name)
+    execute_matching_test(input, expected, data_us.street_name_multi_word_re)
 
 
 @pytest.mark.parametrize(
@@ -236,7 +237,22 @@ def test_post_direction(input, expected):
 )
 def test_street_type(input, expected):
     """tests string match for a street id"""
-    execute_matching_test(input, expected, data_us.street_type)
+    execute_matching_test(input, expected, data_us.street_type_extended)
+
+
+@pytest.mark.parametrize(
+    "input,expected",
+    [
+        # positive assertions
+        ("ED DR", True),
+        ("El Camino Real", True),
+        # negative assertions
+        ("Camino Del Toro Loco", False),
+    ],
+)
+def test_typed_street_name(input, expected):
+    """tests string match for street name and type"""
+    execute_matching_test(input, expected, data_us.typed_street_name)
 
 
 @pytest.mark.parametrize(
@@ -453,6 +469,8 @@ def test_full_street_positive(input, expected):
     "input,expected",
     [
         # positive assertions
+        ("2633 Camino Ramon Ste. 400 San Ramon, CA 94583-2176", True),
+        ("2951 El Camino Real Palo Alto, CA 94306", True),
         ("3821 ED DR, RALEIGH, NC 27612", True),
         ("213 WEST 35TH STREET SUITE, 400, NEW YORK, NY", True),
         ("326 33RD AVE., EAST, SEATTLE, WA 98112", True),
