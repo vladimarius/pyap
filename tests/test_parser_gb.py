@@ -16,7 +16,8 @@ def execute_matching_test(input, expected, pattern):
     match = utils.match(pattern, input, re.VERBOSE)
     is_found = match is not None
     if expected:
-        assert is_found == expected and match.group(0) == input  # type: ignore
+        assert is_found == expected
+        assert match.group(0) == input  # type: ignore
     else:
         assert (is_found == expected) or (match.group(0) != input)  # type: ignore
 
@@ -480,7 +481,7 @@ def test_country(input, expected):
     "input,expected",
     [
         # positive assertions
-        ("11-59 High Road, East Finchley London, N2 8AW", True),
+        ("11-59 High Road\nEast Finchley London\nN2 8AW, UK", True),
         ("88 White parkway, Stanleyton, L2 3DB", True),
         ("Studio 96D, Graham roads, Westtown, L1A 3GP, Great Britain", True),
         ("01 Brett mall, Lake Donna, W02 3JQ", True),

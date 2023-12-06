@@ -68,9 +68,9 @@ thousand = r"""
                                 )
 """
 
-part_divider = r"(?: [\,\ \.\-]{0,3}\,[\,\ \.\-]{0,3} )"
+part_divider = r"(?:[\,\ \.\-]{0,3}[\,\n][\,\ \.\-]{0,3})"
 space_pattern = (
-    r"(?: [\ \t]{1,3} )"  # TODO: use \b for word boundary and \s for whitespace
+    r"(?:[\ \t]{1,3})"  # TODO: use \b for word boundary and \s for whitespace
 )
 
 """
