@@ -28,6 +28,9 @@ def str_list_to_upper_lower_regex(str_list: List[str]) -> str:
     return regex
 
 
+space_div = r"(?:[\,\ ]{1,2}|$)"
+
+
 """Numerals from one to nine
 Note: here and below we use syntax like '[Oo][Nn][Ee]'
 instead of '(one)(?i)' to match 'One' or 'oNe' because
@@ -83,7 +86,7 @@ Street number can be written 2 ways:
    c) - "85 1190"
 """
 street_number = r"""(?P<street_number>
-                        (?:
+                        \b(?:
                             [Aa][Nn][Dd]\ 
                             |
                             {thousand}
@@ -95,9 +98,7 @@ street_number = r"""(?P<street_number>
                             {ten_to_ninety}
                         ){from_to}
                         |
-                        (?:\d{from_to}
-                            (?:\ ?\-?\ ?(?:\d{from_to}|(?:\-\ ?[A-Z])))?\ 
-                        )
+                        (?:\b\d{from_to}(?:\ ?\-\ ?(?:\d{from_to}|[A-Z]))?\ )
                     )
                 """.format(
     thousand=thousand,
@@ -140,10 +141,11 @@ interstate_street_type = r"""
                 [Ii][Nn][Tt][Ee][Rr][Ss][Tt][Aa][Tt][Ee]\ *\d{{1,4}}
             )
             (?:
-                [\ ?\,?]{{,2}}{optional_interstate_specs}
+                {space_div}{optional_interstate_specs}
             )?
 """.format(
-    optional_interstate_specs=str_list_to_upper_lower_regex(interstate_specs)
+    space_div=space_div,
+    optional_interstate_specs=str_list_to_upper_lower_regex(interstate_specs),
 )
 
 highway_re = r"""(?:[Hh][Ii][Gg][Hh][Ww][Aa][Yy]\ +\d{1,4})"""
@@ -157,13 +159,9 @@ post_direction_re = r"""
                         [Ww][Ee][Ss][Tt]
                     )
                     |
-                    (?:
-                        NW|NE|SW|SE
-                    )
+                    (?:NW|NE|SW|SE)\b
                     |
-                    (?:
-                        N\.?|S\.?|E\.?|W\.?
-                    )
+                    (?:N|S|E|W)\b\.?
                 )
                 """
 
@@ -775,11 +773,9 @@ def street_type_list_to_regex(street_type_list):
 
     # Use \b to check that there are word boundaries before and after the street type
     # Optionally match zero to two of " ", ",", or "." after the street name
-    street_types = street_types.replace("|", r"\b{div}|\b")
-    street_types = r"\b" + r"(?:" + street_types + r")" + r"\b\.?(?:[\,\ ]|$)"
-    return street_types.format(
-        div=r"[\.\ ,]{0,2}",
-    )
+    street_types = street_types.replace("|", r"\b|\b")
+    street_types = r"\b" + r"(?:" + street_types + r")" + r"\b\.?"
+    return street_types
 
 
 street_types_re = street_type_list_to_regex(street_type_list)
@@ -792,23 +788,23 @@ street_type_extended = r"""
             (?:
                 {street_type_a}
                 (?P<route_id>
-                    [\(\ \,]{route_symbols}
-                    [Rr][Oo][Uu][Tt][Ee]\ [A-Za-z0-9]+[\)\ \,]{route_symbols}
+                    {space_div}\(?[Rr][Oo][Uu][Tt][Ee]\ [A-Za-z0-9]+(?:\ ?\))?
                 )?
             )
 """.format(
     street_type_a=rf"(?P<street_type_a>{street_types_with_interstate_re})",
-    route_symbols="{0,3}",
+    space_div=space_div,
 )
 
 
 typed_street_name = r"""
             (?:      
-                (?:{street_name_a}[\ \,]{{1,2}}{street_type_a})
+                (?:{street_name_a}{space_div}{street_type_a})
                 |
-                (?:{street_type_b}{street_name_b})
+                (?:{street_type_b}{space_div}{street_name_b})
             )
 """.format(
+    space_div=space_div,
     street_name_a=rf"(?P<street_name_a>{street_name_multi_word_re})",
     street_type_a=street_type_extended,
     street_type_b=rf"(?P<street_type_b>{street_types_leading_re})",
@@ -861,7 +857,6 @@ building = r"""
                     |
                     \d{{0,4}}(?:\.\d)?[A-Za-z]?[XxVvIi]{{0,4}}
                 )
-                \ ?
             )
             """.format(
     thousand=thousand,
@@ -876,23 +871,23 @@ occupancy = r"""
                     (?:
                         (?:
                             # Suite
-                            [Ss][Uu][Ii][Tt][Ee]\,?\ |[Ss][Tt][Ee]?[\.\ ]{1,2}
+                            [Ss][Uu][Ii][Tt][Ee]|[Ss][Tt][Ee]?
                             |
                             # Apartment
-                            [Aa][Pp][Tt]\.?\ |[Aa][Pp][Aa][Rr][Tt][Mm][Ee][Nn][Tt]\ 
+                            [Aa][Pp][Tt]|[Aa][Pp][Aa][Rr][Tt][Mm][Ee][Nn][Tt]
                             |
                             # Room
-                            [Rr][Oo][Oo][Mm]\ |[Rr][Mm]\.?\ 
+                            [Rr][Oo][Oo][Mm]|[Rr][Mm]
                             |
                             # Unit
-                            [Uu][Nn][Ii][Tt]\ 
+                            [Uu][Nn][Ii][Tt]
                             |
                             # Place
-                            [Pp][Ll][Aa][Cc][Ee]\ |[Pp][Ll]\.?\ 
+                            [Pp][Ll][Aa][Cc][Ee]|[Pp][Ll]
                             |
                             # Bay
-                            [Bb][Aa][Yy]\.?\ 
-                        )
+                            [Bb][Aa][Yy]
+                        )\b[\ \,\.]+
                         (?:
                             [A-Za-z\#\&\-\d]{1,7}
                         )?
@@ -905,7 +900,9 @@ occupancy = r"""
                     (?:
                         \#?\ ?[0-9]{1,4}
                     )
-                )(:?[\s\,]|$)
+                    |
+                    (?:\b\d{2}-\d{4})
+                )
             )
             """
 
@@ -935,14 +932,16 @@ phone_number = r"""
             )
             """
 
+part_div = r"(?:[\,\s]{1,2}|$)"  # allows for line breaks
+
 full_street = r"""
     (?:
         (?P<full_street>
             (?:
-                (?P<po_box_b>{po_box}\,?\s?)?
-                {street_number}
+                (?:(?P<po_box_b>{po_box}){part_div})?
+                {street_number}{space_div}?
                 (?:
-                    (?:{typed_street_name})
+                    (?:{typed_street_name}(?![A-Za-z\d\.]))
                     |
                     (?:{single_street_name})
                     |
@@ -950,18 +949,19 @@ full_street = r"""
                         {post_direction_re}\ 
                         [A-z0-9\.\-]{{2,31}}
                     )
-                )\,?\ ?
-                (?:{post_direction}\b\,?)?
-                \s?
-                {floor}?\,?\ ?
-                {building}?\,?\ ?
-                {occupancy}?\,?\ ?
-                (?P<po_box_a>{po_box})?
+                )
+                (?:{space_div}{post_direction})?
+                (?:{part_div}{floor})?
+                (?:{part_div}{building})?
+                (?:{part_div}{occupancy})?
+                (?:{part_div}(?P<po_box_a>{po_box}))?
             )
             |
             (?P<po_box_c>{po_box})
         )
     )""".format(
+    space_div=space_div,
+    part_div=part_div,
     street_number=street_number,
     typed_street_name=typed_street_name,
     single_street_name=single_street_name,
@@ -1149,19 +1149,19 @@ country = r"""
 
 full_address = r"""
                 (?P<full_address>
-                    {full_street} {div}
-                    {phone_number}? {div}
-                    {city}
+                    {full_street}
+                    (?:{part_div} {phone_number})?
+                    {part_div}{city}
                     (?:
-                        [\, -]{{1,2}} {region1} (?![A-Za-z])
+                        {part_div} {region1} (?![A-Za-z])
                         | 
-                        [\, -]{{0,3}} {postal_code}
+                        (?:{part_div}|\ ?\-\ ?|(?<=\.)) {postal_code}
                     ){{1,2}}
-                    {div} {country}?
+                    (?:{part_div} {country})?
                 )
                 """.format(
     full_street=full_street,
-    div=r"[\,\s-]{,2}",
+    part_div=part_div,
     city=city,
     region1=region1,
     country=country,
