@@ -105,14 +105,14 @@ class AddressParser:
     @staticmethod
     def _normalize_string(text: str) -> str:
         """Prepares incoming text for parsing:
-        removes excessive spaces, tabs, newlines, etc.
+        removes excessive spaces, tabs, etc.
+        We should keep the newlines as they are
+        good indicators for limits of elements.
         """
         conversion = {
-            # newlines
-            r"\r*(\n\r*)+": ", ",
-            r"\s*(\,\s*)+": ", ",
+            r"[\ \t]*(\,[\ \t]*)+": ", ",
             # replace excessive empty spaces
-            r"\s+": " ",
+            r"\ +": " ",
             # convert all types of hyphens/dashes to a
             # simple old-school dash
             # from http://utf8-chartable.de/unicode-utf8-table.pl?

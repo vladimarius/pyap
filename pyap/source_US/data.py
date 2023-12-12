@@ -146,7 +146,7 @@ interstate_street_type = r"""
     optional_interstate_specs=str_list_to_upper_lower_regex(interstate_specs)
 )
 
-highway_re = r"""(?:[Hh][Ii][Gg][Hh][Ww][Aa][Yy]\s+\d{1,4})"""
+highway_re = r"""(?:[Hh][Ii][Gg][Hh][Ww][Aa][Yy]\ +\d{1,4})"""
 
 post_direction_re = r"""
                 (?:
@@ -178,6 +178,7 @@ single_street_name_list = [
     "Broadway",
     "Highpoint",
     "Parkway",
+    r"Black\ Hou?rse",
 ]
 
 
@@ -904,7 +905,7 @@ occupancy = r"""
                     (?:
                         \#?\ ?[0-9]{1,4}
                     )
-                )(:?[\ \,]|$)
+                )(:?[\s\,]|$)
             )
             """
 
@@ -949,11 +950,12 @@ full_street = r"""
                         {post_direction_re}\ 
                         [A-z0-9\.\-]{{2,31}}
                     )
-                )\,?\s?
-                (?:{post_direction}[,\s])?
-                {floor}?\,?\s?
-                {building}?\,?\s?
-                {occupancy}?\,?\s?
+                )\,?\ ?
+                (?:{post_direction}\b\,?)?
+                \s?
+                {floor}?\,?\ ?
+                {building}?\,?\ ?
+                {occupancy}?\,?\ ?
                 (?P<po_box_a>{po_box})?
             )
             |
@@ -1159,7 +1161,7 @@ full_address = r"""
                 )
                 """.format(
     full_street=full_street,
-    div=r"[\, -]{,2}",
+    div=r"[\,\s-]{,2}",
     city=city,
     region1=region1,
     country=country,

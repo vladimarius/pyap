@@ -387,7 +387,10 @@ def test_po_box_positive(input, expected):
     "input,expected",
     [
         # positive assertions
+        ("1806 Dominion Way Ste B", True),
+        ("696 BEAL PKWY", True),
         ("3821 ED DR", True),
+        ("8025 BLACK HOURSE", True),
         ("3525 PIEDMONT RD. NE ST.8-520", True),
         ("140 EAST 45TH, ST, 28TH FLOOR", True),
         ("600 HIGHWAY 32 EAST,", True),
@@ -469,6 +472,8 @@ def test_full_street_positive(input, expected):
     "input,expected",
     [
         # positive assertions
+        ("8025 BLACK HORSE\nSTE 300\nPLEASANTVILLE NJ 08232", True),
+        ("696 BEAL PKWY NW\nFT WALTON BCH FL 32547", True),
         ("2633 Camino Ramon Ste. 400 San Ramon, CA 94583-2176", True),
         ("2951 El Camino Real Palo Alto, CA 94306", True),
         ("3821 ED DR, RALEIGH, NC 27612", True),
