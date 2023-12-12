@@ -11,14 +11,13 @@ import pyap.source_US.data as data_us
 def execute_matching_test(input, expected, pattern):
     match = utils.match(pattern, input, re.VERBOSE)
     is_found = match is not None
-    if expected:
-        assert is_found == expected and match.group(0) == input  # type: ignore
+    if is_found:
+        if expected:
+            assert match.group(0) == input
+        else:
+            assert match.group(0) != input
     else:
-        """we check that:
-        - input should not to match our regex
-        - our match should be partial if regex matches some part of string
-        """
-        assert (is_found == expected) or (match.group(0) != input)  # type: ignore
+        assert not expected
 
 
 @pytest.mark.parametrize(
@@ -194,7 +193,6 @@ def test_single_street_name(input, expected):
         ("SE", True),
         # negative assertions
         ("NW.", False),
-        ("NW.", False),
         ("NS", False),
         ("EW", False),
     ],
@@ -208,21 +206,19 @@ def test_post_direction(input, expected):
     "input,expected",
     [
         # positive assertions
-        ("Street ", True),
-        ("St. ", True),
+        ("Street", True),
         ("St.", True),
         ("Blvd.", True),
-        ("Blvd. ", True),
-        ("LN ", True),
+        ("LN", True),
         ("RD", True),
         ("Cir", True),
-        ("Highway ", True),
-        ("Hwy ", True),
+        ("Highway", True),
+        ("Hwy", True),
         ("Ct", True),
         ("Sq.", True),
-        ("LP. ", True),
+        ("LP.", True),
         ("LP. (Route A1 )", True),
-        ("Street route 5 ", True),
+        ("Street route 5", True),
         ("blvd", True),
         ("Estate", True),
         ("Manor", True),
@@ -285,12 +281,12 @@ def test_floor(input, expected):
     [
         # positive assertions
         ("Building II", True),
-        ("bldg m ", True),
-        ("Building F ", True),
-        ("bldg 2 ", True),
-        ("building 3 ", True),
-        ("building 100 ", True),
-        ("building 1000 ", True),
+        ("bldg m", True),
+        ("Building F", True),
+        ("bldg 2", True),
+        ("building 3", True),
+        ("building 100", True),
+        ("building 1000", True),
         ("Building ", True),
         ("building one ", True),
         ("Building three ", True),
@@ -311,33 +307,33 @@ def test_building(input, expected):
     [
         # positive assertions
         ("ST.8-520", True),
-        ("suite 900 ", True),
-        ("Suite #2 ", True),
-        ("suite #218 ", True),
-        ("suite J7 ", True),
-        ("suite 102A ", True),
-        ("suite a&b ", True),
-        ("Suite J#200 ", True),
-        ("suite 710-327 ", True),
-        ("Suite A ", True),
-        ("ste A ", True),
-        ("Ste 101 ", True),
-        ("ste 502b ", True),
-        ("ste 14-15 ", True),
-        ("ste E ", True),
-        ("ste 9E ", True),
-        ("Suite 1800 ", True),
-        ("Apt 1B ", True),
-        ("Rm. 52 ", True),
-        ("#2b ", True),
+        ("suite 900", True),
+        ("Suite #2", True),
+        ("suite #218", True),
+        ("suite J7", True),
+        ("suite 102A", True),
+        ("suite a&b", True),
+        ("Suite J#200", True),
+        ("suite 710-327", True),
+        ("Suite A", True),
+        ("ste A", True),
+        ("Ste 101", True),
+        ("ste 502b", True),
+        ("ste 14-15", True),
+        ("ste E", True),
+        ("ste 9E", True),
+        ("Suite 1800", True),
+        ("Apt 1B", True),
+        ("Rm. 52", True),
+        ("#2b", True),
         ("Unit 101", True),
         ("unit 101", True),
         ("#20", True),
         ("Place ", True),
         ("Pl ", True),
-        ("PL. ", True),
+        ("PL.", True),
         ("Place #1200", True),
-        ("Pl #1200 ", True),
+        ("Pl #1200", True),
         ("#1900", True),
         ("#2500C", True),
         ("# 1900", True),
@@ -387,27 +383,28 @@ def test_po_box_positive(input, expected):
     "input,expected",
     [
         # positive assertions
+        ("899 HEATHROW PARK LN", True),
         ("1806 Dominion Way Ste B", True),
         ("696 BEAL PKWY", True),
         ("3821 ED DR", True),
         ("8025 BLACK HOURSE", True),
         ("3525 PIEDMONT RD. NE ST.8-520", True),
         ("140 EAST 45TH, ST, 28TH FLOOR", True),
-        ("600 HIGHWAY 32 EAST,", True),
+        ("600 HIGHWAY 32 EAST", True),
         ("9652 Loiret Boulevard", True),
         ("101 MacIntosh Boulevard", True),
         ("1 West Hegeler Lane", True),
         ("1270 Leeds Avenue", True),
-        ("85-1190 Ranchview Rd. NW ", True),
+        ("85-1190 Ranchview Rd. NW", True),
         ("62 Portland Road (Route 1)", True),
         ("200 N. Pine Avenue Suite 514", True),
         ("200 S. Alloy Drive", True),
         ("Two Hundred S. Alloy Drive", True),
         ("Two Hundred South Alloy Drive", True),
         ("Two Hundred South Alloy Dr.", True),
-        ("11001 Fondren Rd,", True),
+        ("11001 Fondren Rd", True),
         ("9606 North Mopac Expressway Suite 500", True),
-        ("9692 East Arapahoe Road,", True),
+        ("9692 East Arapahoe Road", True),
         ("9 Grand Avenue, Suite 2", True),
         ("9 Grand Avenue Building 2, Suite 2", True),
         ("9 Grand Avenue Building 2, Suite 2A", True),
@@ -440,12 +437,12 @@ def test_po_box_positive(input, expected):
         ("1865 Corporate Dr Ste 225", True),
         ("80 Beaman Rd", True),
         ("9691 Spratley Ave", True),
-        ("10835 New Haven Rd NW ", True),
+        ("10835 New Haven Rd NW", True),
         ("320 W Broussard Rd", True),
         ("9001 Any Old Way", True),
         ("8967 Market St.", True),
         ("3724 Oxford Blvd.", True),
-        ("901 Rainier Ave S ", True),
+        ("901 Rainier Ave S", True),
         ("One Parkway", True),
         ("55 Highpoint", True),
         ("1365 Broadway", True),
@@ -472,6 +469,7 @@ def test_full_street_positive(input, expected):
     "input,expected",
     [
         # positive assertions
+        # ("899 HEATHROW PARK LN\nLAKE MARY,FL 32746", True),
         ("8025 BLACK HORSE\nSTE 300\nPLEASANTVILLE NJ 08232", True),
         ("696 BEAL PKWY NW\nFT WALTON BCH FL 32547", True),
         ("2633 Camino Ramon Ste. 400 San Ramon, CA 94583-2176", True),

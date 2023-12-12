@@ -87,6 +87,18 @@ def test_combine_results():
     [
         ("No address here", None),
         (
+            "899 HEATHROW PARK LN 02-2135\nLAKE MARY,FL 32746",
+            {
+                "street_number": "899",
+                "street_name": "HEATHROW PARK",
+                "street_type": "LN",
+                "city": "LAKE MARY",
+                "region1": "FL",
+                "postal_code": "32746",
+                "full_address": "899 HEATHROW PARK LN 02-2135\nLAKE MARY, FL 32746",
+            },
+        ),
+        (
             "696 BEAL PKWY NW\nFT WALTON BCH FL 32547",
             {
                 "street_number": "696",
@@ -96,7 +108,7 @@ def test_combine_results():
                 "city": "FT WALTON BCH",
                 "region1": "FL",
                 "postal_code": "32547",
-                "full_address": ("696 BEAL PKWY NW\nFT WALTON BCH FL 32547"),
+                "full_address": "696 BEAL PKWY NW\nFT WALTON BCH FL 32547",
             },
         ),
         (
@@ -123,7 +135,7 @@ def test_combine_results():
                 "city": "NORTON SHORES",
                 "region1": None,
                 "postal_code": "49441",
-                "full_address": ("1300 E MOUNT GARFIELD ROAD, NORTON SHORES 49441"),
+                "full_address": "1300 E MOUNT GARFIELD ROAD, NORTON SHORES 49441",
             },
         ),
         (
