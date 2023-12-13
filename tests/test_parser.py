@@ -87,6 +87,19 @@ def test_combine_results():
     [
         ("No address here", None),
         (
+            "2590 Elm Road NE - Warren, OH 44483",
+            {
+                "street_number": "2590",
+                "street_name": "Elm",
+                "street_type": "Road",
+                "post_direction": "NE",
+                "city": "Warren",
+                "region1": "OH",
+                "postal_code": "44483",
+                "full_address": "2590 Elm Road NE - Warren, OH 44483",
+            },
+        ),
+        (
             "899 HEATHROW PARK LN 02-2135\nLAKE MARY,FL 32746",
             {
                 "street_number": "899",
@@ -180,7 +193,7 @@ def test_parse_address(input: str, expected):
     if result := ap.parse(input):
         expected = expected or {}
         received = {key: getattr(result[0], key) for key in expected}
-        assert expected == received
+        assert received == expected
     else:
         assert expected is None
 

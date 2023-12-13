@@ -469,7 +469,6 @@ def test_full_street_positive(input, expected):
     "input,expected",
     [
         # positive assertions
-        # ("899 HEATHROW PARK LN\nLAKE MARY,FL 32746", True),
         ("8025 BLACK HORSE\nSTE 300\nPLEASANTVILLE NJ 08232", True),
         ("696 BEAL PKWY NW\nFT WALTON BCH FL 32547", True),
         ("2633 Camino Ramon Ste. 400 San Ramon, CA 94583-2176", True),

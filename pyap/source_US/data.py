@@ -98,7 +98,7 @@ street_number = r"""(?P<street_number>
                             {ten_to_ninety}
                         ){from_to}
                         |
-                        (?:\b\d{from_to}(?:\ ?\-\ ?(?:\d{from_to}|[A-Z]))?\ )
+                        (?:\b\d{from_to}(?:\-(?:\d{from_to}|[A-Z]))?\ )
                     )
                 """.format(
     thousand=thousand,
@@ -932,7 +932,7 @@ phone_number = r"""
             )
             """
 
-part_div = r"(?:[\,\s]{1,2}|$)"  # allows for line breaks
+part_div = r"(?:[\,\s]{1,2}|\ \-\ |$)"  # allows for line breaks
 
 full_street = r"""
     (?:
@@ -1155,7 +1155,7 @@ full_address = r"""
                     (?:
                         {part_div} {region1} (?![A-Za-z])
                         | 
-                        (?:{part_div}|\ ?\-\ ?|(?<=\.)) {postal_code}
+                        (?:{part_div}|(?<=\.)) {postal_code}
                     ){{1,2}}
                     (?:{part_div} {country})?
                 )
